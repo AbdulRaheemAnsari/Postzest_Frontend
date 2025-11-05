@@ -60,7 +60,7 @@ export const PostCard = ({ post }: PostCardProps) => {
         )}
 
         {/* Status Badge */}
-        <div className="w-full absolute flex items-center justify-between top-3 right-2 left-2 pr-4 z-50">
+        <div className="w-full absolute flex items-center justify-between top-3 right-2 left-2 pr-4 z-10">
           <Badge
             className={`text-background capitalize ${getStatusVariant(
               post.status

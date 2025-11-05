@@ -225,3 +225,96 @@ export const mockPosts: Post[] = [
     ],
   },
 ];
+
+
+
+export const mockScheduledPosts = [
+  {
+    id: '1',
+    platform: 'instagram',
+    scheduledDate: '2025-11-07',
+    scheduledTime: '10:23 PM',
+    content: 'Beautiful sunset moment 🌅',
+    image: '/placeholder.svg?key=dqc9a',
+    author: {
+      name: 'Sarah',
+      avatar: '/placeholder.svg?key=elfkz',
+    },
+    hashtags: ['#sunset', '#nature', '#photography'],
+  },
+  {
+    id: '2',
+    platform: 'linkedin',
+    scheduledDate: '2025-11-21',
+    scheduledTime: '11:42 PM',
+    content: 'Excited to share our latest project milestone! 🎉',
+    image: '/placeholder.svg?key=lu6dx',
+    author: {
+      name: 'John',
+      avatar: '/placeholder.svg?key=81fvd',
+    },
+    hashtags: ['#business', '#growth', '#milestone'],
+  },
+  {
+    id: '3',
+    platform: 'instagram',
+    scheduledDate: '2025-12-12',
+    scheduledTime: '10:23 PM',
+    content: 'Morning coffee vibes ☕',
+    image: '/placeholder.svg?key=zkewp',
+    author: {
+      name: 'Emily',
+      avatar: '/placeholder.svg?key=ldkm3',
+    },
+    hashtags: ['#coffee', '#morning', '#vibes'],
+  },
+  {
+    id: '4',
+    platform: 'linkedin',
+    scheduledDate: '2025-12-7',
+    scheduledTime: '11:42 PM',
+    content: 'Team collaboration at its best! 💪',
+    author: {
+      name: 'Mike',
+      avatar: '/placeholder.svg?key=q9wzt',
+    },
+    hashtags: ['#teamwork', '#collaboration'],
+  },
+  {
+    id: '5',
+    platform: 'linkedin',
+    scheduledDate: '2026-01-10',
+    scheduledTime: '11:42 PM',
+    content: 'Industry insights and trends 📊',
+    author: {
+      name: 'Lisa',
+      avatar: '/placeholder.svg?key=qvhdd',
+    },
+    hashtags: ['#insights', '#trends', '#industry'],
+  },
+  {
+    id: '6',
+    platform: 'instagram',
+    scheduledDate: '2026-01-17',
+    scheduledTime: '10:23 PM',
+    content: 'Weekend adventures 🏖️',
+    image: '/placeholder.svg?key=bel3i',
+    author: {
+      name: 'Alex',
+      avatar: '/placeholder.svg?key=700rs',
+    },
+    hashtags: ['#weekend', '#adventure', '#beach'],
+  },
+  {
+    id: '7',
+    platform: 'linkedin',
+    scheduledDate: '2025-11-17',
+    scheduledTime: '11:42 PM',
+    content: 'New leadership opportunities! 🚀',
+    author: {
+      name: 'Chris',
+      avatar: '/placeholder.svg?key=3uaby',
+    },
+    hashtags: ['#leadership', '#opportunity'],
+  },
+];

@@ -125,7 +125,7 @@ export default function SocialAccounts() {
             onClick={() => dispatch(openSocialConnectModal())}
             className="flex md:w-auto w-full cursor-pointer hover:bg-primary/90 items-center justify-center gap-0.5 bg-primary py-6 px-12 font-semibold text-sm"
           >
-            <Plus className="w-6 h-6" />
+            <Plus strokeWidth={3} className="w-6 h-6" />
             Connect Account
           </Button>
         </div>

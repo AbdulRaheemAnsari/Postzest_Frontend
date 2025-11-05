@@ -119,7 +119,7 @@ export const FilterBar = ({ title }: { title: string }) => {
             onClick={() => dispatch(openCreatePostModal())}
             className="flex md:w-auto w-full cursor-pointer hover:bg-primary/90 items-center justify-center gap-0.5 bg-primary py-6 !px-5 font-semibold text-sm"
           >
-            <Plus strokeWidth={3} className="w-6 h-6 wei" />
+            <Plus strokeWidth={3} className="w-6 h-6" />
             Create Post
           </Button>
         </div>

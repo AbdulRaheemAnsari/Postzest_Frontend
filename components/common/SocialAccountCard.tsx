@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { CircleCheck, MoreVertical, RefreshCw, Trash, X } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
+import instagram from "@/assets/images/instagram.png";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,6 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Separator } from "../ui/separator";
+import Image from "next/image";
 
 interface AccountCardProps {
   username: string;
@@ -45,9 +47,11 @@ const SocialAccountCard = ({
             <img
               src={profileImage}
               alt={username}
-              className="w-10 h-10 rounded-full object-cover border-4 border-primary"
+              className="w-12 h-12 rounded-full object-cover border-2 border-primary"
             />
-            <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-success rounded-full border-2 border-card" />
+            <div className="absolute -bottom-0.5 z-20 -right-1 w-5 h-5 bg-success rounded-full border border-card">
+             <Image src={instagram} alt="" className="w-5" />
+            </div>
           </div>
           <div>
             <p className="font-semibold text-card-foreground">Instagram</p>
