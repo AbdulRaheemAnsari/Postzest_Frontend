@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { CircleCheck, MoreVertical, RefreshCw, Trash, X } from "lucide-react";
-import { Switch } from "@/components/ui/switch";
+import { CircleCheck, MoreVertical, RefreshCw, Trash } from "lucide-react";
 import instagram from "@/assets/images/instagram.png";
 import {
   DropdownMenu,
@@ -10,6 +9,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Separator } from "../ui/separator";
 import Image from "next/image";
+import { ToggleSwitch } from "./ToggleSwitch";
+import { Badge } from "../ui/badge";
 
 interface AccountCardProps {
   username: string;
@@ -26,7 +27,6 @@ interface AccountCardProps {
 const SocialAccountCard = ({
   username,
   profileImage,
-  isConnected,
   hasToggle = true,
   onToggle,
   onDisconnect,
@@ -50,7 +50,7 @@ const SocialAccountCard = ({
               className="w-12 h-12 rounded-full object-cover border-2 border-primary"
             />
             <div className="absolute -bottom-0.5 z-20 -right-1 w-5 h-5 bg-success rounded-full border border-card">
-             <Image src={instagram} alt="" className="w-5" />
+              <Image src={instagram} alt="" className="w-5" />
             </div>
           </div>
           <div>
@@ -84,18 +84,12 @@ const SocialAccountCard = ({
       <Separator className="bg-muted-foreground/16 my-4" />
 
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-0.5 bg-[#F1F9EB] rounded-full px-2 py-0.5">
-          <CircleCheck className="w-3 h-3 text-[#78C841]" />
-          <span className="text-sm font-medium text-success text-[#78C841]">
-            Connected
-          </span>
-        </div>
+        <Badge className="bg-[#F1F9EB] font-semibold py-1 text-[#78C841]">
+          <CircleCheck className="!w-4 !h-4 " />
+          Connected
+        </Badge>
 
-        <Switch
-          checked={isToggled}
-          onCheckedChange={handleToggle}
-          className="cursor-pointer"
-        />
+        <ToggleSwitch checked={isToggled} onCheckedChange={handleToggle} />
       </div>
     </div>
   );

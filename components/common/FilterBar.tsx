@@ -26,7 +26,7 @@ export const FilterBar = ({ title }: { title: string }) => {
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div className="flex flex-col items-start gap-4 flex-wrap flex-1">
           <div className="text-2xl font-semibold text-foreground flex items-center gap-2">
-            <span>{title}</span>
+            <span className="text-2xl font-bold text-foreground">{title}</span>
             <Info className="text-muted-foreground/50 w-4 h-4" />
           </div>
 
@@ -117,7 +117,7 @@ export const FilterBar = ({ title }: { title: string }) => {
           </Button>
           <Button
             onClick={() => dispatch(openCreatePostModal())}
-            className="flex md:w-auto w-full cursor-pointer hover:bg-primary/90 items-center justify-center gap-0.5 bg-primary py-6 !px-5 font-semibold text-sm"
+            className="flex md:w-auto w-full cursor-pointer hover:bg-primary/90 items-center justify-center gap-0.5 bg-primary py-[22px] rounded-sm font-semibold text-sm"
           >
             <Plus strokeWidth={3} className="w-6 h-6" />
             Create Post

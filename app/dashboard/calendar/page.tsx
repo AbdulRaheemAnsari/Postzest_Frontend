@@ -46,26 +46,26 @@ export default function CalendarPage() {
 
   return (
     <main className="min-h-screen bg-background">
-      <div className="py-6 space-y-6">
+      <div className="py-4 space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <CalendarDays strokeWidth={2} className="w-6 h-6 text-foreground" />
-            <h1 className="text-2xl font-bold text-foreground">
+            <span className="text-2xl font-bold text-foreground">
               Manage Your Content
-            </h1>
+            </span>
           </div>
           <div className="flex gap-3">
             <Button
               variant="outline"
-              className="rounded-sm py-5 cursor-pointer"
+              className="rounded-sm py-[22px] cursor-pointer"
             >
               <FolderUp />
               Export
             </Button>
             <Button
               onClick={() => dispatch(openCreatePostModal())}
-              className="flex md:w-auto w-full rounded-sm cursor-pointer hover:bg-primary/90 items-center justify-center gap-0.5 bg-primary py-5 !px-5 font-semibold text-sm"
+              className="flex md:w-auto w-full rounded-sm cursor-pointer hover:bg-primary/90 items-center justify-center gap-0.5 bg-primary py-[22px] font-semibold text-sm"
             >
               <Plus strokeWidth={3} className="w-6 h-6" />
               Create Post

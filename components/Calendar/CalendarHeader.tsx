@@ -4,6 +4,7 @@ import {
   ChevronDown,
   ChevronLeft,
   ChevronRight,
+  FileSpreadsheet,
   Globe,
   LayoutGrid,
   SlidersVertical,
@@ -49,7 +50,7 @@ export default function CalendarHeader({
             variant="ghost"
             size="sm"
             onClick={onPrevMonth}
-            className="p-1"
+            className="p-1 cursor-pointer"
           >
             <ChevronLeft className="w-5 h-5" />
           </Button>
@@ -60,7 +61,7 @@ export default function CalendarHeader({
             variant="ghost"
             size="sm"
             onClick={onNextMonth}
-            className="p-1"
+            className="p-1 cursor-pointer"
           >
             <ChevronRight className="w-5 h-5" />
           </Button>
@@ -68,7 +69,6 @@ export default function CalendarHeader({
         <div className="flex items-center gap-2">
           <Button
             variant="outline"
-            size="sm"
             onClick={onToday}
             className="text-sm rounded-sm cursor-pointer"
           >
@@ -79,7 +79,6 @@ export default function CalendarHeader({
             <DropdownMenuTrigger asChild>
               <Button
                 variant="outline"
-                size="sm"
                 className="gap-2 cursor-pointer rounded-sm"
               >
                 {viewType === "weekly" ? "Weekly" : "Monthly"}
@@ -111,7 +110,7 @@ export default function CalendarHeader({
               variant="outline"
               className="gap-2 bg-background rounded-sm cursor-pointer flex items-center justify-center"
             >
-              <SlidersVertical /> All Posts
+              <FileSpreadsheet /> All Posts
               <ChevronDown className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
