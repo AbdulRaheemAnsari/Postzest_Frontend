@@ -18,6 +18,7 @@ import {
   Clock,
 } from "lucide-react";
 import { useDispatch } from "react-redux";
+import { PopoverSelect } from "./PopoverSelect";
 
 export const FilterBar = ({ title }: { title: string }) => {
   const dispatch = useDispatch();
@@ -32,82 +33,59 @@ export const FilterBar = ({ title }: { title: string }) => {
 
           <div className="flex items-center gap-2 flex-wrap">
             {/* All Accounts Dropdown */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="gap-2 bg-background rounded-sm cursor-pointer flex items-center justify-center"
-                >
-                  <LayoutGrid /> All Accounts
-                  <ChevronDown className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-48 bg-popover">
-                <DropdownMenuItem>All Accounts</DropdownMenuItem>
-                <DropdownMenuItem>Account 1</DropdownMenuItem>
-                <DropdownMenuItem>Account 2</DropdownMenuItem>
-                <DropdownMenuItem>Account 3</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <PopoverSelect
+              icon={<LayoutGrid className="h-4 w-4" />}
+              placeholder="All Accounts"
+              width="auto"
+              options={[
+                { label: "All Accounts", value: "all" },
+                { label: "Account 1", value: "account-1" },
+                { label: "Account 2", value: "account-2" },
+                { label: "Account 3", value: "account-3" },
+              ]}
+            />
 
             {/* All Platforms Dropdown */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="gap-2 bg-background rounded-sm cursor-pointer flex items-center justify-center"
-                >
-                  <SlidersVertical /> All Platforms
-                  <ChevronDown className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-48 bg-popover">
-                <DropdownMenuItem>All Platforms</DropdownMenuItem>
-                <DropdownMenuItem>Facebook</DropdownMenuItem>
-                <DropdownMenuItem>Instagram</DropdownMenuItem>
-                <DropdownMenuItem>Twitter</DropdownMenuItem>
-                <DropdownMenuItem>LinkedIn</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <PopoverSelect
+              icon={<SlidersVertical className="h-4 w-4" />}
+              placeholder="All Platforms"
+              width="auto"
+              options={[
+                { label: "All Platforms", value: "all" },
+                { label: "Facebook", value: "facebook" },
+                { label: "Instagram", value: "instagram" },
+                { label: "Twitter", value: "twitter" },
+                { label: "LinkedIn", value: "linkedin" },
+              ]}
+            />
 
             {/* Tags Dropdown */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="gap-2 bg-background rounded-sm cursor-pointer flex items-center justify-center"
-                >
-                  <Tag /> Tags
-                  <ChevronDown className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-48 bg-popover">
-                <DropdownMenuItem>All Tags</DropdownMenuItem>
-                <DropdownMenuItem>Marketing</DropdownMenuItem>
-                <DropdownMenuItem>Product</DropdownMenuItem>
-                <DropdownMenuItem>News</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <PopoverSelect
+              icon={<Tag className="h-4 w-4" />}
+              placeholder="Tags"
+              width="auto"
+              options={[
+                { label: "All Tags", value: "all" },
+                { label: "Marketing", value: "marketing" },
+                { label: "Product", value: "product" },
+                { label: "News", value: "news" },
+              ]}
+            />
 
             {/* All Time Dropdown */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="gap-2 bg-background rounded-sm cursor-pointer flex items-center justify-center"
-                >
-                  <Clock /> All Time
-                  <ChevronDown className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-48 bg-popover">
-                <DropdownMenuItem>All Time</DropdownMenuItem>
-                <DropdownMenuItem>Today</DropdownMenuItem>
-                <DropdownMenuItem>This Week</DropdownMenuItem>
-                <DropdownMenuItem>This Month</DropdownMenuItem>
-                <DropdownMenuItem>This Year</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <PopoverSelect
+            isSearchable={false}
+              icon={<Clock className="h-4 w-4" />}
+              placeholder="All Time"
+              width="auto"
+              options={[
+                { label: "All Time", value: "all" },
+                { label: "Today", value: "today" },
+                { label: "This Week", value: "this-week" },
+                { label: "This Month", value: "this-month" },
+                { label: "This Year", value: "this-year" },
+              ]}
+            />
           </div>
         </div>
 

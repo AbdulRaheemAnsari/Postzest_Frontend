@@ -111,7 +111,7 @@ const data = {
         },
         {
           title: "Settings",
-          url: "/dashboard/settings",
+          url: "/settings/profile",
           icon: Settings,
         },
       ],

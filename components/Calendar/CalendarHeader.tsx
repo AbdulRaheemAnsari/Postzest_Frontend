@@ -1,24 +1,23 @@
 "use client";
 
 import {
-  ChevronDown,
   ChevronLeft,
   ChevronRight,
   FileSpreadsheet,
   Globe,
   LayoutGrid,
-  SlidersVertical,
   Tag,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+
+import { PopoverSelect } from "../common/PopoverSelect";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 interface CalendarHeaderProps {
   currentDate: Date;
@@ -75,109 +74,73 @@ export default function CalendarHeader({
             Today
           </Button>
 
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="outline"
-                className="gap-2 cursor-pointer rounded-sm"
-              >
-                {viewType === "weekly" ? "Weekly" : "Monthly"}
-                <ChevronDown className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuRadioGroup
-                value={viewType}
-                onValueChange={onViewChange}
-              >
-                <DropdownMenuRadioItem value="weekly">
-                  Weekly
-                </DropdownMenuRadioItem>
-                <DropdownMenuRadioItem value="monthly">
-                  Monthly
-                </DropdownMenuRadioItem>
-              </DropdownMenuRadioGroup>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <Select value={viewType} onValueChange={onViewChange}>
+            <SelectTrigger className="justify-between rounded-sm gap-2 cursor-pointer focus:ring-none focus:ring-offset-none">
+              <SelectValue placeholder="Select view" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="weekly">Weekly</SelectItem>
+              <SelectItem value="monthly">Monthly</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
       </div>
 
       <div className="flex items-center gap-2 text-sm ">
         {/* All Platforms Dropdown */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="outline"
-              className="gap-2 bg-background rounded-sm cursor-pointer flex items-center justify-center"
-            >
-              <FileSpreadsheet /> All Posts
-              <ChevronDown className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-48 bg-popover">
-            <DropdownMenuItem>All</DropdownMenuItem>
-            <DropdownMenuItem>Published</DropdownMenuItem>
-            <DropdownMenuItem>Scheduled</DropdownMenuItem>
-            <DropdownMenuItem>Draft</DropdownMenuItem>
-            <DropdownMenuItem>Failled</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <PopoverSelect
+          isSearchable={false}
+          icon={<FileSpreadsheet className="h-4 w-4" />}
+          placeholder="All Posts"
+          width="auto"
+          options={[
+            { label: "All Posts", value: "all" },
+            { label: "Published", value: "published" },
+            { label: "Scheduled", value: "scheduled" },
+            { label: "Draft", value: "draft" },
+          ]}
+        />
+
         {/* Tags Dropdown */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="outline"
-              className="gap-2 bg-background rounded-sm cursor-pointer flex items-center justify-center"
-            >
-              <Tag /> Tags
-              <ChevronDown className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-48 bg-popover">
-            <DropdownMenuItem>All Tags</DropdownMenuItem>
-            <DropdownMenuItem>Marketing</DropdownMenuItem>
-            <DropdownMenuItem>Product</DropdownMenuItem>
-            <DropdownMenuItem>News</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <PopoverSelect
+          icon={<Tag className="h-4 w-4" />}
+          placeholder="Tags"
+          width="auto"
+          options={[
+            { label: "All Tags", value: "all" },
+            { label: "Marketing", value: "marketing" },
+            { label: "Product", value: "product" },
+            { label: "News", value: "news" },
+          ]}
+        />
 
-        {/* All Accounts  */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="outline"
-              className="gap-2 bg-background rounded-sm cursor-pointer flex items-center justify-center"
-            >
-              <LayoutGrid /> All Accounts
-              <ChevronDown className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-48 bg-popover">
-            <DropdownMenuItem>All Accounts</DropdownMenuItem>
-            <DropdownMenuItem>Account 1</DropdownMenuItem>
-            <DropdownMenuItem>Account 2</DropdownMenuItem>
-            <DropdownMenuItem>Account 3</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        {/* All Accounts */}
+        <PopoverSelect
+          icon={<LayoutGrid className="h-4 w-4" />}
+          placeholder="All Accounts"
+          defaultValue="all"
+          width="auto"
+          options={[
+            { label: "All Accounts", value: "all" },
+            { label: "Account 1", value: "account1" },
+            { label: "Account 2", value: "account2" },
+            { label: "Account 3", value: "account3" },
+          ]}
+        />
 
-        {/* Zone  */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="outline"
-              className="gap-2 bg-background rounded-sm cursor-pointer flex items-center justify-center"
-            >
-              <Globe /> Karachi
-              <ChevronDown className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-48 bg-popover">
-            <DropdownMenuItem>All Accounts</DropdownMenuItem>
-            <DropdownMenuItem>Account 1</DropdownMenuItem>
-            <DropdownMenuItem>Account 2</DropdownMenuItem>
-            <DropdownMenuItem>Account 3</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        {/* Zone */}
+        <PopoverSelect
+          icon={<Globe className="h-4 w-4" />}
+          placeholder="Karachi"
+          defaultValue="karachi"
+          width="auto"
+          options={[
+            { label: "Karachi", value: "karachi" },
+            { label: "Lahore", value: "lahore" },
+            { label: "Islamabad", value: "islamabad" },
+            { label: "Multan", value: "multan" },
+          ]}
+        />
       </div>
     </div>
   );

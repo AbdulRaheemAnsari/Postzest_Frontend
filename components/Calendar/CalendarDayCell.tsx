@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { Plus } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import PostCard from "./PostCard";
 import SchedulePostModal from "./SchedulePostModal";
 import { useDispatch } from "react-redux";
@@ -58,7 +57,7 @@ export default function CalendarDayCell({
     <div
       className={`relative min-h-48 p-3 flex flex-col gap-2 transition-colors group ${
         isCurrentDay ? "bg-primary/5 h-full" : ""
-      } ${isOtherMonth ? "opacity-30 bg-muted" : ""}`}
+      } ${isOtherMonth ? "opacity-30 bg-muted/30" : ""}`}
     >
       {/* Date Number */}
       <div className="flex items-center justify-between">
@@ -71,6 +70,14 @@ export default function CalendarDayCell({
         >
           {date.getDate()}
         </span>
+        {isTodayOrFuture && (
+          <div
+            onClick={() => setOpen(true)}
+            className="group-hover:opacity-100 bg-muted opacity-0 transition-opacity flex items-center justify-center text-foreground p-1 cursor-pointer border border-muted-foreground/60 hover:border-primary rounded-xs"
+          >
+            <Plus className="w-4 h-4" />
+          </div>
+        )}
       </div>
 
       {/* Posts */}
@@ -133,22 +140,6 @@ export default function CalendarDayCell({
               className="w-full h-24 object-cover rounded"
             />
           </div>
-        </div>
-      )}
-
-      {!isOtherMonth && isTodayOrFuture && (
-        <div className="group-hover:opacity-100 bg-muted rounded-md opacity-0 p-2 mt-4 transition-opacity ">
-          <div className="h-7 bg-muted-foreground/20 w-7 rounded-full mb-2" />
-          <div className="h-2 w-full bg-muted-foreground/20 rounded-sm mb-1" />
-          <div className="h-2 w-full bg-muted-foreground/20 rounded-sm mb-1" />
-          <div className="h-6 w-full bg-muted-foreground/20 rounded-sm mb-2" />
-          <Button
-            onClick={() => setOpen(true)}
-            className="py-4 mt-2 flex items-center text-xs justify-center text-background gap-0.5 cursor-pointer w-full bg-primary rounded-sm"
-          >
-            <Plus className="w-4 h-4" />
-            Schedule Post
-          </Button>
         </div>
       )}
 

@@ -1,5 +1,5 @@
 "use client";
-
+import Link from 'next/link';
 import { usePathname } from "next/navigation";
 import { type LucideIcon } from "lucide-react";
 import {
@@ -42,7 +42,7 @@ export function NavMain({ items }: { items: NavSection[] }) {
                         : "font-medium hover:bg-muted-foreground/10"
                     }
                   >
-                    <a
+                    <Link
                       href={item.url}
                       className="flex rounded-sm items-center gap-2 w-full"
                     >
@@ -53,7 +53,7 @@ export function NavMain({ items }: { items: NavSection[] }) {
                           {item.badge}
                         </span>
                       )}
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               );

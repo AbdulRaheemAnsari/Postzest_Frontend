@@ -51,7 +51,7 @@ export default function CalendarPage() {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <CalendarDays strokeWidth={2} className="w-6 h-6 text-foreground" />
-            <span className="text-2xl font-bold text-foreground">
+            <span className="text-2xl font-semibold text-foreground">
               Manage Your Content
             </span>
           </div>
