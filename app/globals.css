@@ -49,6 +49,7 @@ body{
    --color-input-border: var(--input-border);
    --color-input-disabled-border: var(--input-disabled-border);
    --color-bg-color-secoundry: var(--bg-color-secoundry);
+   --color-success: var(--success);
 }
 
 :root {
@@ -90,6 +91,7 @@ body{
    --input-border: #C4C4C4;
    --input-disabled-border: #E9E9E9;
    --bg-color-secoundry: #F6F6F6;
+   --success: #5EC169;
 }
 
 .dark {
@@ -155,3 +157,5 @@ body{
 ::-webkit-scrollbar-thumb:hover {
   background-color: rgba(120, 120, 120, 0.6);
 }
+
+

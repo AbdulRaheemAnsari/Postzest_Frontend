@@ -93,7 +93,12 @@ export default function BulkTools() {
                 </p>
 
                 {/* Button */}
-                <Button className="w-full mt-6 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50 transition-all duration-300 group/btn">
+                <Button
+                  onClick={() =>
+                    router.push("/dashboard/bulk-tools/create/video-creation")
+                  }
+                  className="w-full mt-6 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50 transition-all duration-300 group/btn"
+                >
                   <span>Create with AI</span>
                   <ArrowRight className="ml-2 w-4 h-4 group-hover/btn:translate-x-1 transition-transform duration-300" />
                 </Button>
