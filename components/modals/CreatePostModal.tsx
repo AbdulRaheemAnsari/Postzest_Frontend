@@ -1,23 +1,8 @@
-import { useState } from "react";
-import {
-  X,
-  Image as ImageIcon,
-  Hash,
-  Bold,
-  Italic,
-  Smile,
-  Calendar,
-} from "lucide-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { useState, useRef } from "react";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -25,545 +10,628 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  X,
+  Image as ImageIcon,
+  Video,
+  Smile,
+  Calendar,
+  Bold,
+  Italic,
+  Underline,
+  Link as LinkIcon,
+  Crop,
+  Upload,
+  Trash2,
+} from "lucide-react";
+import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-import { ImagePreview } from "../common/ImagePreview";
-import { ImageEditor } from "../common/ImageEditor";
-import { FileUpload } from "../common/FileUpload";
-import { DateTimePicker } from "../common/DateTimePicker";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
+import { closeCreatePostModal } from "@/store/slices/createPostModalSlice";
+import { useDispatch } from "react-redux";
+import { ImageCropModal } from "./ImageCropModal";
+import { ScheduleModal } from "./ScheduleModal";
 
 interface CreatePostModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
 
-const SUGGESTED_TAGS = ["Health", "Medical", "Doctor", "Viral", "Socialpost"];
+interface UploadedImage {
+  id: string;
+  url: string;
+  file?: File;
+}
 
- const CreatePostModal = ({
-  open,
-  onOpenChange,
-}: CreatePostModalProps) => {
-  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+const CreatePostModal = ({ open, onOpenChange }: CreatePostModalProps) => {
+  const dispatch = useDispatch();
   const [caption, setCaption] = useState("");
   const [tags, setTags] = useState("");
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [postType, setPostType] = useState("");
-  const [scheduledDate, setScheduledDate] = useState<Date>();
-  const [showScheduler, setShowScheduler] = useState(false);
-  const [editingImageIndex, setEditingImageIndex] = useState<number | null>(
-    null
+  const [uploadedImages, setUploadedImages] = useState<UploadedImage[]>([]);
+  const [cropModalOpen, setCropModalOpen] = useState(false);
+  const [scheduleModalOpen, setScheduleModalOpen] = useState(false);
+  const [imageToCrop, setImageToCrop] = useState<UploadedImage | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [scheduledDate, setScheduledDate] = useState<Date | null>(null);
+  const [scheduledTime, setScheduledTime] = useState<string>("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const isOpen = useSelector(
+    (state: RootState) => state.postModal.createPostModalOpen
   );
-const isOpen = useSelector(
-     (state: RootState) => state.postModal.createPostModalOpen
-   );
 
+  const suggestedTags = [
+    "Health",
+    "Medical",
+    "Doctor",
+    "Viral",
+    "Socialpost",
+    "Medical",
+  ];
 
-  const hasContent = selectedFiles.length > 0 || caption.trim().length > 0;
+  const handleImageUpload = (files: FileList | null) => {
+    if (!files) return;
 
-  const handleFilesSelected = (files: File[]) => {
-    setSelectedFiles((prev) => [...prev, ...files]);
+    const newImages: UploadedImage[] = Array.from(files).map((file) => ({
+      id: Math.random().toString(36).substr(2, 9),
+      url: URL.createObjectURL(file),
+      file,
+    }));
+
+    setUploadedImages((prev) => [...prev, ...newImages]);
+    toast.success(`${newImages.length} image(s) added`);
   };
 
-  const handleRemoveFile = (index: number) => {
-    setSelectedFiles((prev) => prev.filter((_, i) => i !== index));
-  };
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
 
-  const handleEditFile = (index: number) => {
-    setEditingImageIndex(index);
-  };
+    const files = e.dataTransfer.files;
+    if (files && files.length > 0) {
+      const imageFiles = Array.from(files).filter((file) =>
+        file.type.startsWith("image/")
+      );
 
-  const handleSaveEditedImage = (editedImage: File) => {
-    if (editingImageIndex !== null) {
-      setSelectedFiles((prev) => {
-        const newFiles = [...prev];
-        newFiles[editingImageIndex] = editedImage;
-        return newFiles;
-      });
-      setEditingImageIndex(null);
-      // toast({
-      //   title: "Image updated!",
-      //   description: "Your image has been edited successfully.",
-      // });
+      if (imageFiles.length > 0) {
+        handleImageUpload(imageFiles as unknown as FileList);
+      } else {
+        toast.error("Please drop only image files");
+      }
     }
   };
 
-  const handleTagClick = (tag: string) => {
-    if (!selectedTags.includes(tag)) {
-      setSelectedTags((prev) => [...prev, tag]);
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = () => {
+    setIsDragging(false);
+  };
+
+  const handleCropClick = (image: UploadedImage) => {
+    setImageToCrop(image);
+    setCropModalOpen(true);
+  };
+
+  const handleCropComplete = (croppedImageUrl: string) => {
+    if (imageToCrop) {
+      setUploadedImages((prev) =>
+        prev.map((img) =>
+          img.id === imageToCrop.id ? { ...img, url: croppedImageUrl } : img
+        )
+      );
+      toast.success("Image cropped successfully");
     }
   };
 
-  const handleSchedule = () => {
-    setShowScheduler(true);
+  const handleRemoveImage = (id: string) => {
+    setUploadedImages((prev) => prev.filter((img) => img.id !== id));
+    toast.success("Image removed");
+  };
+
+  const handleSchedule = (date: Date, time: string) => {
+    setScheduledDate(date);
+    setScheduledTime(time);
+    toast.success(`Post scheduled for ${date.toLocaleDateString()} at ${time}`);
   };
 
   const handlePostNow = () => {
-    // toast({
-    //   title: "Post published!",
-    //   description: "Your post has been published successfully.",
-    // });
+    if (uploadedImages.length === 0) {
+      toast.error("Please add at least one image");
+      return;
+    }
+    toast.success("Post published successfully!");
     onOpenChange(false);
   };
 
   const handleSaveDraft = () => {
-    // toast({
-    //   title: "Draft saved!",
-    //   description: "Your post has been saved as a draft.",
-    // });
-    onOpenChange(false);
+    toast.success("Draft saved successfully!");
+  };
+
+  const addTag = (tag: string) => {
+    if (!tags.includes(tag)) {
+      setTags(tags ? `${tags}, ${tag}` : tag);
+    }
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="!w-[1200px] p-0 gap-0 h-[90vh] overflow-y-auto">
-        <div className="flex h-full">
-          {/* Left Side - Form */}
-          <div className="flex-1 overflow-y-auto">
-            <DialogHeader className="p-6 pb-4 border-b sticky top-0 bg-background z-10">
-              <DialogTitle className="text-xl">Create Image Post</DialogTitle>
-            </DialogHeader>
+    <>
+      <Dialog
+        open={isOpen}
+        onOpenChange={() => dispatch(closeCreatePostModal())}
+      >
+        <DialogContent className="max-w-[95vw] md:max-w-[1000px] p-0 gap-0 h-[90vh] overflow-hidden">
+          <div className="w-full  flex items-center h-full">
+            {/* Left Panel */}
+            <div className="p-4 w-[60%] md:p-6 h-[90vh] overflow-y-scroll">
+              <div className="flex items-center justify-between mb-4 md:mb-6">
+                <h2 className="text-lg md:text-xl font-semibold text-foreground">
+                  Create Image Post
+                </h2>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => onOpenChange(false)}
+                  className="h-8 w-8"
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
 
-            <div className="p-6 space-y-6">
-              {/* Select Accounts and Post Type */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label>Select Accounts</Label>
-                  <Select>
-                    <SelectTrigger>
-                      <SelectValue>
-                        <div className="flex items-center gap-2">
-                          <Avatar className="h-6 w-6">
-                            <AvatarImage src="" />
-                            <AvatarFallback className="bg-primary text-primary-foreground text-xs">
-                              RM
-                            </AvatarFallback>
-                          </Avatar>
-                          <span className="text-sm">raheelmansari7284</span>
-                          <X className="w-4 h-4 ml-auto" />
-                        </div>
-                      </SelectValue>
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="account1">
-                        raheelmansari7284
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
+              {/* Select Accounts */}
+              <div className="space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-foreground">
+                      Select Accounts
+                    </label>
+                    <Select defaultValue="ramsaanap">
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="ramsaanap">
+                          <div className="flex items-center gap-2">
+                            <div className="w-6 h-6 rounded-full bg-primary/10" />
+                            <span>ramsaanap7284</span>
+                          </div>
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-foreground">
+                      Post Type
+                    </label>
+                    <Select defaultValue="image">
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="image">Image Post</SelectItem>
+                        <SelectItem value="video">Video Post</SelectItem>
+                        <SelectItem value="carousel">Carousel</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
 
+                {/* Caption */}
                 <div className="space-y-2">
-                  <Label>Post Type</Label>
-                  <Select value={postType} onValueChange={setPostType}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="image">Image Post</SelectItem>
-                      <SelectItem value="video">Video Post</SelectItem>
-                      <SelectItem value="carousel">Carousel</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <label className="text-sm font-medium text-foreground">
+                    Add Caption
+                  </label>
+                  <div className="relative">
+                    <Textarea
+                      value={caption}
+                      onChange={(e) => setCaption(e.target.value)}
+                      className="min-h-[100px] resize-none pr-24 pb-12"
+                      placeholder="Write your caption..."
+                    />
+                    <div className="absolute bottom-2 left-2 flex items-center gap-1">
+                      <Button variant="ghost" size="icon" className="h-8 w-8">
+                        <Smile className="h-4 w-4" />
+                      </Button>
+                      <Button variant="ghost" size="icon" className="h-8 w-8">
+                        <Bold className="h-4 w-4" />
+                      </Button>
+                      <Button variant="ghost" size="icon" className="h-8 w-8">
+                        <Italic className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 hidden sm:flex"
+                      >
+                        <Underline className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 hidden sm:flex"
+                      >
+                        <LinkIcon className="h-4 w-4" />
+                      </Button>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="absolute bottom-2 right-2 text-xs text-primary hover:text-primary"
+                    >
+                      ✨ Write with AI
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Tags */}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-foreground">
+                    Add Tags{" "}
+                    <span className="text-muted-foreground">(optional)</span>
+                  </label>
+                  <Input
+                    value={tags}
+                    onChange={(e) => setTags(e.target.value)}
+                    placeholder="Write something..."
+                    className="mb-2"
+                  />
+                  <div className="flex flex-wrap gap-2">
+                    {suggestedTags.map((tag) => (
+                      <Button
+                        key={tag}
+                        variant="outline"
+                        size="sm"
+                        className="text-xs h-7"
+                        onClick={() => addTag(tag)}
+                      >
+                        + {tag}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Media Upload */}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-foreground">
+                    Add Media
+                  </label>
+
+                  {/* Drag & Drop Zone */}
+                  {uploadedImages.length === 0 ? (
+                    <div
+                      onDrop={handleDrop}
+                      onDragOver={handleDragOver}
+                      onDragLeave={handleDragLeave}
+                      onClick={() => fileInputRef.current?.click()}
+                      className={cn(
+                        "border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors",
+                        isDragging
+                          ? "border-primary bg-primary/5"
+                          : "border-border hover:border-primary/50"
+                      )}
+                    >
+                      <Upload className="h-10 w-10 mx-auto mb-3 text-muted-foreground" />
+                      <p className="text-sm font-medium text-foreground mb-1">
+                        Drop images here or click to upload
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        Support JPG, PNG, GIF up to 10MB
+                      </p>
+                    </div>
+                  ) : (
+                    <>
+                      {/* Image Grid */}
+                      <div
+                        onDrop={handleDrop}
+                        onDragOver={handleDragOver}
+                        onDragLeave={handleDragLeave}
+                        className={cn(
+                          "grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3 p-3 border-2 border-dashed rounded-lg",
+                          isDragging
+                            ? "border-primary bg-primary/5"
+                            : "border-border"
+                        )}
+                      >
+                        {uploadedImages.map((img, index) => (
+                          <div
+                            key={img.id}
+                            className="relative group aspect-square"
+                          >
+                            <img
+                              src={img.url}
+                              alt={`Upload ${index + 1}`}
+                              className="w-full h-full object-cover rounded-lg"
+                            />
+                            <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center gap-1">
+                              <Button
+                                variant="secondary"
+                                size="icon"
+                                className="h-7 w-7"
+                                onClick={() => handleCropClick(img)}
+                              >
+                                <Crop className="h-3 w-3" />
+                              </Button>
+                              <Button
+                                variant="destructive"
+                                size="icon"
+                                className="h-7 w-7"
+                                onClick={() => handleRemoveImage(img.id)}
+                              >
+                                <Trash2 className="h-3 w-3" />
+                              </Button>
+                            </div>
+                            {index === 0 && uploadedImages.length > 1 && (
+                              <div className="absolute bottom-1 left-1 bg-background/90 text-xs px-1.5 py-0.5 rounded">
+                                +{uploadedImages.length - 1}
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  )}
+
+                  <div className="flex gap-2 mt-3">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8 text-blue-500"
+                    >
+                      <ImageIcon className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8 text-blue-500"
+                    >
+                      <Video className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8 text-blue-500"
+                    >
+                      <Smile className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      size="sm"
+                      className="text-xs h-8 ml-auto"
+                      onClick={() => fileInputRef.current?.click()}
+                    >
+                      + Add more
+                    </Button>
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      className="hidden"
+                      onChange={(e) => handleImageUpload(e.target.files)}
+                    />
+                  </div>
                 </div>
               </div>
 
-              {/* Caption */}
-              <div className="space-y-2">
-                <Label>Add Caption</Label>
-                <Textarea
-                  placeholder="Add your content here e.g. Caption, description, emoji."
-                  value={caption}
-                  onChange={(e) => setCaption(e.target.value)}
-                  className="min-h-[120px] resize-none"
-                />
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1">
-                    <Button variant="ghost" size="icon" className="h-8 w-8">
-                      <ImageIcon className="h-4 w-4" />
-                    </Button>
-                    <Button variant="ghost" size="icon" className="h-8 w-8">
-                      <Hash className="h-4 w-4" />
-                    </Button>
-                    <Button variant="ghost" size="icon" className="h-8 w-8">
-                      <Bold className="h-4 w-4" />
-                    </Button>
-                    <Button variant="ghost" size="icon" className="h-8 w-8">
-                      <Italic className="h-4 w-4" />
-                    </Button>
-                    <Button variant="ghost" size="icon" className="h-8 w-8">
-                      <Smile className="h-4 w-4" />
-                    </Button>
-                  </div>
+              {/* Footer Actions */}
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 mt-6 pt-6 border-t">
+                <Button
+                  variant="outline"
+                  onClick={handleSaveDraft}
+                  className="w-full sm:w-auto"
+                >
+                  Save as Draft
+                </Button>
+                <div className="flex flex-col sm:flex-row gap-2">
                   <Button
-                    variant="ghost"
-                    size="sm"
-                    className="text-xs text-primary"
+                    variant="outline"
+                    className="gap-2 w-full sm:w-auto"
+                    onClick={() => setScheduleModalOpen(true)}
                   >
-                    ✨ Write with AI
+                    <Calendar className="h-4 w-4" />
+                    {scheduledDate ? `Scheduled: ${scheduledTime}` : "Schedule"}
+                  </Button>
+                  <Button onClick={handlePostNow} className="w-full sm:w-auto">
+                    Post now
                   </Button>
                 </div>
               </div>
-
-              {/* Tags */}
-              <div className="space-y-2">
-                <Label>
-                  Add Tags{" "}
-                  <span className="text-muted-foreground">(optional)</span>
-                </Label>
-                <Input
-                  placeholder="Write something..."
-                  value={tags}
-                  onChange={(e) => setTags(e.target.value)}
-                />
-                <div className="flex flex-wrap gap-2">
-                  {SUGGESTED_TAGS.map((tag) => (
-                    <Button
-                      key={tag}
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleTagClick(tag)}
-                      className={cn(
-                        selectedTags.includes(tag) &&
-                          "bg-primary text-primary-foreground"
-                      )}
-                    >
-                      + {tag}
-                    </Button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Media Upload */}
-              <div className="space-y-2">
-                <Label>Add Media</Label>
-                <FileUpload
-                  onFilesSelected={handleFilesSelected}
-                  selectedFiles={selectedFiles}
-                  onRemoveFile={handleRemoveFile}
-                  onEditFile={handleEditFile}
-                />
-              </div>
-
-              {/* Schedule Section */}
-              {showScheduler && (
-                <div className="space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
-                  <Label>Schedule Post</Label>
-                  <DateTimePicker
-                    date={scheduledDate}
-                    onDateTimeChange={setScheduledDate}
-                  />
-                </div>
-              )}
             </div>
 
-            {/* Footer Actions */}
-            <div className="sticky bottom-0 bg-background border-t p-6 flex items-center justify-between">
-              <Button variant="outline" onClick={handleSaveDraft}>
-                Save as Draft
-              </Button>
-              <div className="flex items-center gap-2">
-                <Button
-                  variant="outline"
-                  onClick={handleSchedule}
-                  className="gap-2"
-                >
-                  <Calendar className="h-4 w-4" />
-                  Schedule
-                </Button>
-                <Button onClick={handlePostNow}>Post now</Button>
+            {/* Right Panel - Preview */}
+            <div className="bg-muted w-[40%] border-t lg:border-t-0 lg:border-l p-4 md:p-6 overflow-y-auto">
+              <div className="flex items-center gap-2 mb-4">
+                <h3 className="text-sm font-medium text-foreground">
+                  Media Preview
+                </h3>
+                <div className="w-4 h-4 rounded-full border-2 border-muted-foreground flex items-center justify-center">
+                  <span className="text-[10px] text-muted-foreground">i</span>
+                </div>
+              </div>
+
+              {/* Instagram Preview */}
+              <div className="bg-background rounded-lg shadow-sm overflow-hidden max-w-md mx-auto">
+                {/* Header */}
+                <div className="flex items-center justify-between p-3 border-b">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
+                      <div className="w-7 h-7 rounded-full bg-background flex items-center justify-center">
+                        <div className="w-6 h-6 rounded-full bg-primary" />
+                      </div>
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-1">
+                        <span className="text-sm font-semibold">ramsaanap</span>
+                        <svg
+                          className="w-3 h-3 text-blue-500"
+                          viewBox="0 0 24 24"
+                          fill="currentColor"
+                        >
+                          <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                      </div>
+                      <p className="text-[10px] text-muted-foreground">
+                        Lonar, Maharashtra
+                      </p>
+                    </div>
+                  </div>
+                  <Button variant="ghost" size="icon" className="h-8 w-8">
+                    <span className="text-xl">⋯</span>
+                  </Button>
+                </div>
+
+                {/* Image */}
+                <div className="aspect-square bg-muted relative">
+                  {uploadedImages.length > 0 ? (
+                    <img
+                      src={uploadedImages[0].url}
+                      alt="Post preview"
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center">
+                      <div className="text-center">
+                        <ImageIcon className="h-12 w-12 mx-auto mb-2 text-muted-foreground" />
+                        <p className="text-sm text-muted-foreground">
+                          No image added yet
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                  {uploadedImages.length > 1 && (
+                    <div className="absolute bottom-2 right-2 w-6 h-6 rounded-full bg-background/80 flex items-center justify-center">
+                      <span className="text-xs">🖼️</span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Actions */}
+                <div className="p-3 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <div className="flex gap-3">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 p-0"
+                      >
+                        <svg
+                          className="w-6 h-6"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                          />
+                        </svg>
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 p-0"
+                      >
+                        <svg
+                          className="w-6 h-6"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                          />
+                        </svg>
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 p-0"
+                      >
+                        <svg
+                          className="w-6 h-6"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                          />
+                        </svg>
+                      </Button>
+                    </div>
+                    <Button variant="ghost" size="icon" className="h-8 w-8 p-0">
+                      <svg
+                        className="w-6 h-6"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
+                        />
+                      </svg>
+                    </Button>
+                  </div>
+
+                  {uploadedImages.length > 1 && (
+                    <div className="flex gap-1">
+                      {uploadedImages.slice(0, 5).map((_, i) => (
+                        <div
+                          key={i}
+                          className={`h-1.5 rounded-full ${
+                            i === 0
+                              ? "w-6 bg-primary"
+                              : "w-1.5 bg-muted-foreground/30"
+                          }`}
+                        />
+                      ))}
+                    </div>
+                  )}
+
+                  <div>
+                    <p className="text-xs">
+                      <span className="font-semibold">ramsaanap</span>{" "}
+                      <span className="text-muted-foreground">
+                        {caption || "Your caption will appear here..."}
+                      </span>
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      View 1 comment
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
+        </DialogContent>
+      </Dialog>
 
-          {/* Right Side - Preview */}
-          {hasContent && (
-            <ImagePreview caption={caption} images={selectedFiles} />
-          )}
-        </div>
+      <ImageCropModal
+        open={cropModalOpen}
+        onOpenChange={setCropModalOpen}
+        imageSrc={imageToCrop?.url || ""}
+        onCropComplete={handleCropComplete}
+      />
 
-        {/* Image Editor Modal */}
-        {editingImageIndex !== null && (
-          <ImageEditor
-            open={editingImageIndex !== null}
-            onOpenChange={(open) => !open && setEditingImageIndex(null)}
-            image={selectedFiles[editingImageIndex]}
-            onSave={handleSaveEditedImage}
-          />
-        )}
-      </DialogContent>
-    </Dialog>
+      <ScheduleModal
+        open={scheduleModalOpen}
+        onOpenChange={setScheduleModalOpen}
+        onSchedule={handleSchedule}
+      />
+    </>
   );
 };
 
 export default CreatePostModal;
-
-// import { useState } from "react";
-// import {
-//   Dialog,
-//   DialogContent,
-//   DialogHeader,
-//   DialogTitle,
-//   DialogTrigger,
-// } from "@/components/ui/dialog";
-// import { Button } from "@/components/ui/button";
-// import {
-//   Select,
-//   SelectContent,
-//   SelectItem,
-//   SelectTrigger,
-//   SelectValue,
-// } from "@/components/ui/select";
-// import { Textarea } from "@/components/ui/textarea";
-// import {
-//   ImagePlus,
-//   X,
-//   Calendar,
-//   Facebook,
-//   Twitter,
-//   Linkedin,
-//   Instagram,
-// } from "lucide-react";
-// import { toast } from "sonner";
-// import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-// import FormattingToolbar from "../common/FormattingToolbar";
-// import TagInput from "../common/TagInput";
-// import ImageUploadZone from "../common/ImageUploadZone";
-// import MediaPreview from "../common/MediaPreview";
-// import { closeCreatePostModal } from "@/store/slices/createPostModalSlice";
-// import { useDispatch } from "react-redux";
-// import { useSelector } from "react-redux";
-// import { RootState } from "@/store";
-
-// interface UploadedImage {
-//   id: string;
-//   url: string;
-//   file: File;
-// }
-
-// interface SelectedAccount {
-//   id: string;
-//   username: string;
-//   platform: string;
-//   avatar?: string;
-// }
-
-// export default function CreatePostModal() {
-//   const dispatch = useDispatch();
-//   const [open, setOpen] = useState(false);
-//   const isOpen = useSelector(
-//     (state: RootState) => state.postModal.createPostModalOpen
-//   );
-//   const [selectedAccounts, setSelectedAccounts] = useState<SelectedAccount[]>([
-//     { id: "1", username: "@username•social", platform: "instagram" },
-//   ]);
-//   const [postType, setPostType] = useState("");
-//   const [caption, setCaption] = useState("");
-//   const [tags, setTags] = useState<string[]>([]);
-//   const [images, setImages] = useState<UploadedImage[]>([]);
-
-//   const handleImageUpload = (files: FileList | null) => {
-//     if (!files) return;
-
-//     const newImages: UploadedImage[] = Array.from(files).map((file) => ({
-//       id: Math.random().toString(36).substr(2, 9),
-//       url: URL.createObjectURL(file),
-//       file,
-//     }));
-
-//     setImages((prev) => [...prev, ...newImages]);
-//     toast.success(`${files.length} image(s) uploaded`);
-//   };
-
-//   const handleRemoveImage = (id: string) => {
-//     setImages((prev) => prev.filter((img) => img.id !== id));
-//   };
-
-//   const handleRemoveAccount = (id: string) => {
-//     setSelectedAccounts((prev) => prev.filter((acc) => acc.id !== id));
-//   };
-
-//   const handleAddAccount = () => {
-//     toast.info("Add account functionality would be implemented here");
-//   };
-
-//   const handleSaveAsDraft = () => {
-//     toast.success("Post saved as draft");
-//   };
-
-//   const handleSchedule = () => {
-//     toast.info("Schedule functionality would be implemented here");
-//   };
-
-//   const handlePostNow = () => {
-//     if (!caption && images.length === 0) {
-//       toast.error("Please add a caption or image");
-//       return;
-//     }
-//     toast.success("Post published successfully!");
-//     setOpen(false);
-//     // Reset form
-//     setCaption("");
-//     setImages([]);
-//     setTags([]);
-//   };
-
-//   const hasContent = caption.trim() || images.length > 0;
-
-//   const wordCount = caption.trim().split(/\s+/).filter(Boolean).length;
-
-//   return (
-//     <Dialog open={isOpen} onOpenChange={() => dispatch(closeCreatePostModal())}>
-//       <DialogContent
-//         className={`p-0 ${hasContent ? "max-w-[900px]" : "max-w-[520px]"}`}
-//       >
-//         <div className="flex">
-//           {/* Left Panel - Form */}
-//           <div className={`${hasContent ? "w-[500px]" : "w-full"} p-6`}>
-//             <DialogHeader className="mb-5">
-//               <DialogTitle className="text-lg font-semibold">
-//                 Create Image Post
-//               </DialogTitle>
-//             </DialogHeader>
-
-//             <div className="space-y-4">
-//               {/* Account and Post Type Selection */}
-//               <div className="grid grid-cols-2 gap-3">
-//                 <div>
-//                   <label className="mb-1.5 block text-sm font-medium">
-//                     Select Accounts
-//                   </label>
-//                   <div className="flex flex-wrap gap-2">
-//                     {selectedAccounts.map((acc) => (
-//                       <div
-//                         key={acc.id}
-//                         className="flex items-center gap-1.5 rounded-md border bg-background px-2 py-1"
-//                       >
-//                         <Avatar className="h-5 w-5">
-//                           <AvatarImage src={acc.avatar} />
-//                           <AvatarFallback className="text-xs">
-//                             {acc.username.charAt(1).toUpperCase()}
-//                           </AvatarFallback>
-//                         </Avatar>
-//                         <span className="text-xs">{acc.username}</span>
-//                         <button
-//                           onClick={() => handleRemoveAccount(acc.id)}
-//                           className="ml-1 text-muted-foreground hover:text-foreground"
-//                         >
-//                           <X className="h-3 w-3" />
-//                         </button>
-//                       </div>
-//                     ))}
-//                     <button
-//                       onClick={handleAddAccount}
-//                       className="flex h-7 items-center justify-center rounded-md border border-dashed px-2 text-xs text-muted-foreground hover:border-primary hover:text-primary"
-//                     >
-//                       + Add
-//                     </button>
-//                   </div>
-//                 </div>
-
-//                 <div>
-//                   <label className="mb-1.5 block text-sm font-medium">
-//                     Post Type
-//                   </label>
-//                   <Select value={postType} onValueChange={setPostType}>
-//                     <SelectTrigger className="h-9">
-//                       <SelectValue placeholder="Select" />
-//                     </SelectTrigger>
-//                     <SelectContent>
-//                       <SelectItem value="image">Image Post</SelectItem>
-//                       <SelectItem value="video">Video Post</SelectItem>
-//                       <SelectItem value="carousel">Carousel</SelectItem>
-//                     </SelectContent>
-//                   </Select>
-//                 </div>
-//               </div>
-
-//               {/* Caption Input */}
-//               <div>
-//                 <label className="mb-1.5 block text-sm font-medium">
-//                   Add Caption
-//                 </label>
-//                 <div className="relative">
-//                   <Textarea
-//                     placeholder="Add your content here (e.g. Caption, description, emojis...)"
-//                     value={caption}
-//                     onChange={(e) => setCaption(e.target.value)}
-//                     className="min-h-[100px] resize-none text-sm"
-//                     maxLength={800}
-//                   />
-//                   <div className="absolute bottom-2 right-2">
-//                     <span className="text-xs text-muted-foreground">
-//                       {wordCount} words/800
-//                     </span>
-//                   </div>
-//                 </div>
-//                 <FormattingToolbar />
-//               </div>
-
-//               {/* Tags Input */}
-//               <TagInput tags={tags} onTagsChange={setTags} />
-
-//               {/* Media Upload */}
-//               <ImageUploadZone
-//                 images={images}
-//                 onImageUpload={handleImageUpload}
-//                 onRemoveImage={handleRemoveImage}
-//               />
-
-//               {/* Social Media Icons */}
-//               <div className="flex items-center gap-2">
-//                 <button className="flex h-7 w-7 items-center justify-center rounded-full bg-[#1DA1F2] text-white hover:opacity-90">
-//                   <Twitter className="h-3.5 w-3.5" fill="currentColor" />
-//                 </button>
-//                 <button className="flex h-7 w-7 items-center justify-center rounded-full bg-[#1877F2] text-white hover:opacity-90">
-//                   <Facebook className="h-3.5 w-3.5" fill="currentColor" />
-//                 </button>
-//                 <button className="flex h-7 w-7 items-center justify-center rounded-full bg-[#0A66C2] text-white hover:opacity-90">
-//                   <Linkedin className="h-3.5 w-3.5" fill="currentColor" />
-//                 </button>
-//                 <button className="flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-[#833AB4] via-[#FD1D1D] to-[#F77737] text-white hover:opacity-90">
-//                   <Instagram className="h-3.5 w-3.5" />
-//                 </button>
-//               </div>
-//             </div>
-
-//             {/* Footer Actions */}
-//             <div className="mt-5 flex items-center justify-between border-t pt-4">
-//               <Button
-//                 variant="ghost"
-//                 onClick={handleSaveAsDraft}
-//                 className="text-sm"
-//               >
-//                 Save as Draft
-//               </Button>
-//               <div className="flex gap-2">
-//                 <Button
-//                   variant="outline"
-//                   onClick={handleSchedule}
-//                   className="text-sm"
-//                 >
-//                   <Calendar className="mr-1.5 h-3.5 w-3.5" />
-//                   Schedule
-//                 </Button>
-//                 <Button onClick={handlePostNow} className="text-sm">
-//                   Post now
-//                 </Button>
-//               </div>
-//             </div>
-//           </div>
-
-//           {/* Right Panel - Media Preview (only show when there's content) */}
-//           {hasContent && (
-//             <MediaPreview
-//               caption={caption}
-//               images={images}
-//               account={selectedAccounts[0]?.username || "@username•social"}
-//             />
-//           )}
-//         </div>
-//       </DialogContent>
-//     </Dialog>
-//   );
-// }

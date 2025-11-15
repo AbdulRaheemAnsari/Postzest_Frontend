@@ -3,6 +3,8 @@
 import { Flame, Eye, Sparkles, Grid2x2, Image, Video } from "lucide-react";
 import { motion } from "framer-motion";
 import { Separator } from "@/components/ui/separator";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 const aiTemplates = [
   {
@@ -14,6 +16,7 @@ const aiTemplates = [
       "Instantly generate realistic UGC-style videos with AI-powered templates for product demos, testimonials, and viral campaigns.",
     stats: { hot: "🔥 Very Hot", views: "∞ Infinite Views" },
     buttonText: "Create AI UGC Video",
+    url: "",
   },
   {
     id: 2,
@@ -24,6 +27,7 @@ const aiTemplates = [
       "Create engaging videos using a dynamic 4-image grid format that’s proven to go viral across platforms.",
     stats: { hot: "📈 Trending", views: "20M+ Views" },
     buttonText: "Create Template",
+    url: ""
   },
   {
     id: 3,
@@ -34,6 +38,7 @@ const aiTemplates = [
       "Simple yet powerful format with billions of views — ideal for storytellers who want maximum impact with minimal effort.",
     stats: { hot: "🔥 Trending", views: "500M+ Views" },
     buttonText: "Create Template",
+    url: "/dashboard/content-studio/create/single-fade-in-video"
   },
 ];
 
@@ -89,9 +94,13 @@ export default function ContentStudio() {
 
               {/* Button */}
               <div className="p-5 pt-0">
-                <button className="w-full py-2.5 text-sm font-semibold bg-primary text-background rounded-md cursor-pointer hover:bg-primary transition-all duration-200">
+                <Link
+                href={template?.url}
+                >
+                <Button className="w-full py-6 text-sm font-semibold bg-primary text-background rounded-md cursor-pointer hover:bg-primary transition-all duration-200">
                   {template.buttonText}
-                </button>
+                </Button>
+                </Link>
               </div>
             </motion.div>
           ))}

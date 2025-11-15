@@ -5,12 +5,14 @@ import Hero from "@/components/HomeComponents/Hero";
 import ImpactSection from "@/components/HomeComponents/ImpactSection";
 import PricingSection from "@/components/HomeComponents/PricingSection";
 import ROISection from "@/components/HomeComponents/ROISection";
+import SocialConnectSection from "@/components/HomeComponents/SocialConnectSection";
 import SocialProof from "@/components/HomeComponents/SocialProof";
 import TestimonialsSection from "@/components/HomeComponents/TestimonialsSection";
 import UseCaseSection from "@/components/HomeComponents/UseCaseSection";
 import { useIntersectionObserver } from "@/hooks/use-intersection-observer";
 
 const Index = () => {
+  const { ref: socialConnectRef, isIntersecting: socialConnectVisible } = useIntersectionObserver();
    const { ref: featuresRef, isIntersecting: featuresVisible } = useIntersectionObserver();
   const { ref: impactRef, isIntersecting: impactVisible } = useIntersectionObserver();
   const { ref: roiRef, isIntersecting: roiVisible } = useIntersectionObserver();
@@ -22,6 +24,14 @@ const Index = () => {
   return (
    <div className="min-h-screen bg-background">
       <Hero />
+       <div
+        ref={socialConnectRef}
+        className={`transition-all duration-700 ${
+          socialConnectVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+        }`}
+      >
+        <SocialConnectSection />
+      </div>
       <div
         ref={featuresRef}
         className={`transition-all duration-700 ${

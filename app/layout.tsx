@@ -6,8 +6,7 @@ import { Providers } from "@/store";
 import { Toaster } from "sonner";
 import ClientModals from "@/components/modals/ClientModals";
 import GlobalLoaderProvider from "@/components/common/GlobalLoaderProvider";
-import Header from "@/components/HomeComponents/Header";
-import Footer from "@/components/HomeComponents/Footer";
+import ConditionalLayout from "@/components/common/ConditionalLayout";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -40,9 +39,7 @@ export default function RootLayout({
         <GlobalLoaderProvider>
           <Providers>
             <ReactQueryProvider>
-              <Header />
-              {children}
-              <Footer />
+              <ConditionalLayout>{children}</ConditionalLayout>
             </ReactQueryProvider>
             <Toaster
               position="top-right"

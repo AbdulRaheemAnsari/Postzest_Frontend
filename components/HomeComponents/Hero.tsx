@@ -48,7 +48,7 @@ const Hero = () => {
             transform: calculateTransform(index * 100, index * 150),
           }}
         >
-          <div className="bg-background rounded-lg p-1.5 blur-[0.5px] transition-shadow">
+          <div className="bg-background rounded-lg p-1.5 blur-[0.8px] transition-shadow ">
             <Image src={Icon} className="w-10" alt="icon" />
           </div>
         </div>
@@ -73,7 +73,7 @@ const Hero = () => {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Button
               // onClick={() => setIsVideoOpen(true)}÷]
-              className="bg-primary cursor-pointer text-primary-foreground hover:bg-primary/90 px-8 py-6 font-semibold text-sm rounded-sm"
+              className="bg-primary cursor-pointer text-primary-foreground hover:bg-primary/90 px-8 py-7 font-semibold text-sm rounded-md"
             >
               Get started for free
             </Button>
