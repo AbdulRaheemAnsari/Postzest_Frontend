@@ -119,7 +119,7 @@ export function SettingsSidebar({
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader className="border-b border-muted-foreground/10 mb-0 px-4 items-start">
         <Button
-          onClick={() => router.push("/dashboard/content-studio")}
+          onClick={() => router.push("/dashboard/ai-studio")}
           variant="ghost"
           className="bg-muted hover:bg-muted-foreground/10 border border-border cursor-pointer gap-1 flex items-center justify-center text-sm text-muted-foreground hover:text-muted-foreground"
         >

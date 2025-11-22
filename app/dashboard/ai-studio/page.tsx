@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 const aiTemplates = [
   {
@@ -38,12 +39,13 @@ const aiTemplates = [
       "Simple yet powerful format with billions of views — ideal for storytellers who want maximum impact with minimal effort.",
     stats: { hot: "🔥 Trending", views: "500M+ Views" },
     buttonText: "Create Template",
-    url: "/dashboard/content-studio/create/single-fade-in-video"
+    url: "/dashboard/ai-studio/create/single-fade-in-video"
   },
 ];
 
 export default function ContentStudio() {
   return (
+    <ProtectedRoute>
     <section className="py-4">
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center gap-2 mb-8">
@@ -107,5 +109,6 @@ export default function ContentStudio() {
         </div>
       </div>
     </section>
+    </ProtectedRoute>
   );
 }

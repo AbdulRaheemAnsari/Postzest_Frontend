@@ -52,7 +52,7 @@ export function SignUpForm({
       onSuccess: (res) => {
         console.log("res", res);
         toast.success(res?.message);
-        localStorage.setItem("email", res?.email);
+        // localStorage.setItem("email", res?.email);
         router.push("/auth/otp");
       },
       onError: (err) => {

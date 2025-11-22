@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Copy, Share2, Gift, Users, TrendingUp, Sparkles } from "lucide-react";
+import { toast } from "sonner";
 
 const ReferralCard = () => {
   const [referralLink] = useState(
@@ -12,10 +13,9 @@ const ReferralCard = () => {
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(referralLink);
-    // toast({
-    //   title: "Copied!",
-    //   description: "Your referral link is ready to share.",
-    // });
+    toast.success("Copied!", {
+      description: "Your referral link is ready to share.",
+    });
   };
 
   const handleShare = () => {
@@ -59,10 +59,10 @@ const ReferralCard = () => {
   ];
 
   return (
-    <div className="">
-      <div className="py-4">
+    <div className="container max-w-3xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+      <div className="">
         {/* Hero Section */}
-        <div className=" mb-12 lg:mb-16 space-y-4 sm:space-y-2">
+        <div className="mb-8 lg:mb-16 space-y-4 sm:space-y-2">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
             <Sparkles className="w-4 h-4" />
             <span>Share & Earn Rewards</span>
@@ -79,11 +79,11 @@ const ReferralCard = () => {
         </div>
 
         {/* Main Content Grid */}
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 mb-12 lg:mb-16">
+        <div className="grid grid-cols-1 gap-8 lg:gap-12 mb-12 lg:mb-16">
           {/* Left Column - Referral Link Card */}
           <Card className="p-6 sm:p-8 shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-hover)] transition-shadow duration-300 border-border/50">
             <div className="space-y-6">
-              <div className="space-y-3">
+              <div className="space-y-1">
                 <h2 className="text-2xl font-semibold text-foreground">
                   Your Referral Link
                 </h2>
@@ -142,8 +142,10 @@ const ReferralCard = () => {
 
           {/* Right Column - Benefits */}
           <div className="space-y-6">
-            <div className="space-y-3">
-              <h2 className="text-2xl font-semibold text-foreground">Why Share?</h2>
+            <div className="space-y-1">
+              <h2 className="text-2xl font-semibold text-foreground">
+                Why Share?
+              </h2>
               <p className="text-muted-foreground">
                 When you refer friends, everyone benefits from our growing
                 community.
@@ -207,7 +209,7 @@ const ReferralCard = () => {
 
         {/* How It Works Section */}
         <div className="space-y-8">
-          <div className="text-center space-y-3">
+          <div className="text-center space-y-1">
             <h2 className="text-3xl sm:text-4xl font-semibold text-foreground">
               How It Works
             </h2>
@@ -216,7 +218,7 @@ const ReferralCard = () => {
             </p>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid sm:grid-cols-1 lg:grid-cols-2 gap-6">
             {steps.map((step, index) => (
               <Card
                 key={index}

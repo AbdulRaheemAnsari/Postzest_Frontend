@@ -54,7 +54,7 @@ export const ScheduleModal = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-[500px] p-0 gap-0">
+      <DialogContent className="max-w-[500px] p-0 gap-0 h-[90vh] overflow-y-scroll">
         <div className="p-6">
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
@@ -66,14 +66,6 @@ export const ScheduleModal = ({
                 Choose when to publish your post
               </p>
             </div>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => onOpenChange(false)}
-              className="h-8 w-8"
-            >
-              <X className="h-4 w-4" />
-            </Button>
           </div>
 
           {/* Calendar */}
@@ -81,13 +73,14 @@ export const ScheduleModal = ({
             <label className="text-sm font-medium text-foreground mb-2 block">
               Select Date
             </label>
-            <div className="border rounded-lg">
+
+            <div className="border rounded-lg bg-background p-3">
               <Calendar
                 mode="single"
                 selected={selectedDate}
                 onSelect={setSelectedDate}
                 disabled={(date) => date < new Date()}
-                className={cn("p-3 pointer-events-auto")}
+                className="pointer-events-auto w-full"
               />
             </div>
           </div>
@@ -99,7 +92,7 @@ export const ScheduleModal = ({
             </label>
             <div className="flex gap-2">
               <Select value={selectedHour} onValueChange={setSelectedHour}>
-                <SelectTrigger className="flex-1">
+                <SelectTrigger className="flex-1 py-5">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -116,7 +109,7 @@ export const ScheduleModal = ({
               </span>
 
               <Select value={selectedMinute} onValueChange={setSelectedMinute}>
-                <SelectTrigger className="flex-1">
+                <SelectTrigger className="flex-1 py-5">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -132,7 +125,7 @@ export const ScheduleModal = ({
                 value={selectedPeriod}
                 onValueChange={(v) => setSelectedPeriod(v as "AM" | "PM")}
               >
-                <SelectTrigger className="w-24">
+                <SelectTrigger className="w-24 py-5">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -156,10 +149,19 @@ export const ScheduleModal = ({
 
           {/* Footer */}
           <div className="flex gap-2 justify-end pt-4 border-t">
-            <Button variant="outline" onClick={() => onOpenChange(false)}>
+            <Button
+              variant="outline"
+              className=" rounded-sm py-6 px-6 cursor-pointer font-medium"
+              onClick={() => onOpenChange(false)}
+            >
               Cancel
             </Button>
-            <Button onClick={handleSchedule} disabled={!selectedDate}>
+            <Button
+              variant={"default"}
+              className="bg-primary hover:bg-primary/80 rounded-sm py-6 px-6 cursor-pointer font-semibold"
+              onClick={handleSchedule}
+              disabled={!selectedDate}
+            >
               Schedule Post
             </Button>
           </div>

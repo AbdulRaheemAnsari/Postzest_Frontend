@@ -61,7 +61,7 @@ export function LoginForm({
         const user = res?.data?.user;
         dispatch(setAuthData({ accessToken, user }));
         toast.success(`${res?.data?.user.fullName} Successfully loggedin`);
-        router.push("/");
+        router.push("/dashboard/ai-studio");
       },
       onError: (err) => {
         console.log("err", err);

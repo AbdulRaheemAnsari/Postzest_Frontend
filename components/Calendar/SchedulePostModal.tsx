@@ -3,10 +3,8 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogClose,
 } from "@/components/ui/dialog";
 import { FileText, ImageIcon, VideoIcon, Sparkles } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 interface PostTypeModalProps {
   open: boolean;
@@ -98,13 +96,6 @@ const PostTypeModal = ({
           ))}
         </div>
 
-        <div className="px-6 pb-6 pt-2 border-t border-border/50 bg-muted/20">
-          <DialogClose asChild>
-            <Button variant="ghost" className="w-full">
-              Cancel
-            </Button>
-          </DialogClose>
-        </div>
       </DialogContent>
     </Dialog>
   );

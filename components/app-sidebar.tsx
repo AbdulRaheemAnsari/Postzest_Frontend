@@ -9,6 +9,7 @@ import {
   FileText,
   Layers,
   LayoutDashboard,
+  Plus,
   Settings,
   Upload,
   Users,
@@ -50,14 +51,14 @@ const data = {
     {
       title: "Overview",
       items: [
-        // {
-        //   title: "New Post",
-        //   url: "/new-post",
-        //   icon: FilePlus,
-        // },
         {
-          title: "Content Studio",
-          url: "/dashboard/content-studio",
+          title: "New Post",
+          url: "/dashboard/new-post",
+          icon: FilePlus,
+        },
+        {
+          title: "AI Studio",
+          url: "/dashboard/ai-studio",
           icon: WandSparkles,
         },
         {
@@ -148,9 +149,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
         <Button
           onClick={() => dispatch(openCreatePostModal())}
-          className="w-full rounded-sm font-semibold text-md p-3 py-5 cursor-pointer flex items-center justify-center gap-2"
+          className="w-full font-semibold text-md p-3 py-6 rounded-md cursor-pointer flex items-center justify-center gap-0.5"
         >
-          <FilePlus className="h-5 w-5" />
+          {/* <FilePlus className="h-5 w-5" /> */}
+          <Plus strokeWidth={3} className="h-5 w-5" />
           {!isCollapsed && <span>Create Post</span>}
         </Button>
       </div>

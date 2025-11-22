@@ -48,19 +48,19 @@ export const PostCard = ({ post }: PostCardProps) => {
   };
 
   return (
-    <div className="group relative bg-background rounded-md overflow-hidden border border-border transition-all hover:shadow-sm">
+    <div className="group relative bg-background rounded-2xl overflow-hidden border border-border transition-all shadow-sm">
       {/* Image */}
-      <div className="relative aspect-[4/3] overflow-hidden p-1">
+      <div className="relative aspect-[4/3] overflow-hidden p-1.5">
         {post.image && (
           <img
             src={post.image}
             alt={post.title}
-            className="w-full h-full object-cover rounded-md"
+            className="w-full h-full object-cover rounded-lg"
           />
         )}
 
         {/* Status Badge */}
-        <div className="w-full absolute flex items-center justify-between top-3 right-2 left-2 pr-4 z-10">
+        <div className="w-full absolute flex items-center justify-between top-3 right-2 left-3 pr-4 z-10">
           <Badge
             className={`text-background capitalize ${getStatusVariant(
               post.status
@@ -68,21 +68,24 @@ export const PostCard = ({ post }: PostCardProps) => {
           >
             {post.status}
           </Badge>
-          <Badge className="bg-accent text-muted-foreground capitalize">
-            {post.type}
-          </Badge>
         </div>
       </div>
 
       {/* Content */}
       <div className="p-3">
         {/* Date and Time */}
-        <p className="text-xs text-muted-foreground mb-2">
-          {post.date} · {post.time}
-        </p>
+        <div className="flex items-center justify-between mb-2">
+          <p className="text-xs text-muted-foreground">
+            {post.date} · {post.time}
+          </p>
+
+          <Badge className="bg-accent text-muted-foreground mb-0.5 capitalize">
+            {post.type}
+          </Badge>
+        </div>
 
         {/* Title */}
-        <h3 className="text-sm font-medium text-card-foreground line-clamp-2 mb-4">
+        <h3 className="text-sm font-medium text-foreground line-clamp-2 mb-4">
           {post.title}
         </h3>
 

@@ -3,6 +3,7 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
+import preview from "@/assets/images/preview.png";
 import {
   Select,
   SelectContent,
@@ -23,6 +24,10 @@ import {
   Crop,
   Upload,
   Trash2,
+  Plus,
+  Info,
+  WandSparkles,
+  ImagePlus,
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -32,6 +37,9 @@ import { closeCreatePostModal } from "@/store/slices/createPostModalSlice";
 import { useDispatch } from "react-redux";
 import { ImageCropModal } from "./ImageCropModal";
 import { ScheduleModal } from "./ScheduleModal";
+import { Label } from "../ui/label";
+import { ScrollArea } from "../ui/scroll-area";
+import Image from "next/image";
 
 interface CreatePostModalProps {
   open: boolean;
@@ -162,32 +170,24 @@ const CreatePostModal = ({ open, onOpenChange }: CreatePostModalProps) => {
         onOpenChange={() => dispatch(closeCreatePostModal())}
       >
         <DialogContent className="max-w-[95vw] md:max-w-[1000px] p-0 gap-0 h-[90vh] overflow-hidden">
-          <div className="w-full  flex items-center h-full">
+          <div className="w-full flex items-center h-full">
             {/* Left Panel */}
-            <div className="p-4 w-[60%] md:p-6 h-[90vh] overflow-y-scroll">
-              <div className="flex items-center justify-between mb-4 md:mb-6">
+            <div className=" w-[60%] h-[90vh] flex flex-col">
+              <div className="md:p-4 p-3 flex items-center justify-between">
                 <h2 className="text-lg md:text-xl font-semibold text-foreground">
                   Create Image Post
                 </h2>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => onOpenChange(false)}
-                  className="h-8 w-8"
-                >
-                  <X className="h-4 w-4" />
-                </Button>
               </div>
 
               {/* Select Accounts */}
-              <div className="space-y-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium text-foreground">
+              <div className="space-y-4 md:p-4 p-3 flex-1 overflow-y-auto pr-2">
+                <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <Label className="text-sm font-medium text-foreground">
                       Select Accounts
-                    </label>
+                    </Label>
                     <Select defaultValue="ramsaanap">
-                      <SelectTrigger>
+                      <SelectTrigger className="w-full py-6">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -197,16 +197,22 @@ const CreatePostModal = ({ open, onOpenChange }: CreatePostModalProps) => {
                             <span>ramsaanap7284</span>
                           </div>
                         </SelectItem>
+                        <SelectItem value="ansari">
+                          <div className="flex items-center gap-2">
+                            <div className="w-6 h-6 rounded-full bg-primary/10" />
+                            <span>ansari1223</span>
+                          </div>
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
 
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium text-foreground">
+                  <div className="space-y-1">
+                    <Label className="text-sm font-medium text-foreground">
                       Post Type
-                    </label>
+                    </Label>
                     <Select defaultValue="image">
-                      <SelectTrigger>
+                      <SelectTrigger className="w-full py-6">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -219,10 +225,10 @@ const CreatePostModal = ({ open, onOpenChange }: CreatePostModalProps) => {
                 </div>
 
                 {/* Caption */}
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-foreground">
+                <div className="space-y-1">
+                  <Label className="text-sm font-medium text-foreground">
                     Add Caption
-                  </label>
+                  </Label>
                   <div className="relative">
                     <Textarea
                       value={caption}
@@ -258,24 +264,25 @@ const CreatePostModal = ({ open, onOpenChange }: CreatePostModalProps) => {
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="absolute bottom-2 right-2 text-xs text-primary hover:text-primary"
+                      className="absolute rounded-sm border cursor-pointer border-dashed border-amber-500 text-amber-500 transition-colors hover:text-amber-600 bottom-2 right-2 text-xs hover:bg-[#FFCE0020]"
                     >
-                      ✨ Write with AI
+                      <WandSparkles />
+                      Write with AI
                     </Button>
                   </div>
                 </div>
 
                 {/* Tags */}
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-foreground">
+                <div className="space-y-1">
+                  <Label className="text-sm font-medium text-foreground">
                     Add Tags{" "}
                     <span className="text-muted-foreground">(optional)</span>
-                  </label>
+                  </Label>
                   <Input
                     value={tags}
                     onChange={(e) => setTags(e.target.value)}
                     placeholder="Write something..."
-                    className="mb-2"
+                    className="mb-2 py-6"
                   />
                   <div className="flex flex-wrap gap-2">
                     {suggestedTags.map((tag) => (
@@ -283,20 +290,21 @@ const CreatePostModal = ({ open, onOpenChange }: CreatePostModalProps) => {
                         key={tag}
                         variant="outline"
                         size="sm"
-                        className="text-xs h-7"
+                        className="text-xs py-4 flex items-center gap-0.5"
                         onClick={() => addTag(tag)}
                       >
-                        + {tag}
+                        <Plus className="w-2 h-2" />
+                        {tag}
                       </Button>
                     ))}
                   </div>
                 </div>
 
                 {/* Media Upload */}
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-foreground">
+                <div className="space-y-1">
+                  <Label className="text-sm font-medium text-foreground">
                     Add Media
-                  </label>
+                  </Label>
 
                   {/* Drag & Drop Zone */}
                   {uploadedImages.length === 0 ? (
@@ -306,18 +314,19 @@ const CreatePostModal = ({ open, onOpenChange }: CreatePostModalProps) => {
                       onDragLeave={handleDragLeave}
                       onClick={() => fileInputRef.current?.click()}
                       className={cn(
-                        "border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors",
+                        "group border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors",
                         isDragging
                           ? "border-primary bg-primary/5"
                           : "border-border hover:border-primary/50"
                       )}
                     >
-                      <Upload className="h-10 w-10 mx-auto mb-3 text-muted-foreground" />
+                      <ImagePlus className="h-10 w-10 mx-auto mb-3 group-hover:scale-110 group-hover:rotate-6 transition-all duration-100 group-hover:text-primary text-muted-foreground" />
+                      {/* <Upload className="h-10 w-10 mx-auto mb-3 text-muted-foreground" /> */}
                       <p className="text-sm font-medium text-foreground mb-1">
                         Drop images here or click to upload
                       </p>
                       <p className="text-xs text-muted-foreground">
-                        Support JPG, PNG, GIF up to 10MB
+                        JPEG, PNG, GIF, MPR, PDF, AVIF, WEBP
                       </p>
                     </div>
                   ) : (
@@ -348,7 +357,7 @@ const CreatePostModal = ({ open, onOpenChange }: CreatePostModalProps) => {
                               <Button
                                 variant="secondary"
                                 size="icon"
-                                className="h-7 w-7"
+                                className="h-7 w-7 cursor-pointer"
                                 onClick={() => handleCropClick(img)}
                               >
                                 <Crop className="h-3 w-3" />
@@ -356,7 +365,7 @@ const CreatePostModal = ({ open, onOpenChange }: CreatePostModalProps) => {
                               <Button
                                 variant="destructive"
                                 size="icon"
-                                className="h-7 w-7"
+                                className="h-7 w-7 cursor-pointer"
                                 onClick={() => handleRemoveImage(img.id)}
                               >
                                 <Trash2 className="h-3 w-3" />
@@ -395,14 +404,17 @@ const CreatePostModal = ({ open, onOpenChange }: CreatePostModalProps) => {
                     >
                       <Smile className="h-4 w-4" />
                     </Button>
-                    <Button
-                      size="sm"
-                      className="text-xs h-8 ml-auto"
-                      onClick={() => fileInputRef.current?.click()}
-                    >
-                      + Add more
-                    </Button>
-                    <input
+                    {uploadedImages.length > 0 && (
+                      <Button
+                        size="sm"
+                        className="text-xs rounded-sm cursor-pointer ml-auto"
+                        onClick={() => fileInputRef.current?.click()}
+                      >
+                        + Add more
+                      </Button>
+                    )}
+
+                    <Input
                       ref={fileInputRef}
                       type="file"
                       accept="image/*"
@@ -415,204 +427,223 @@ const CreatePostModal = ({ open, onOpenChange }: CreatePostModalProps) => {
               </div>
 
               {/* Footer Actions */}
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 mt-6 pt-6 border-t">
+              <div
+                className="bg-background sticky md:px-4 px-3 bottom-0 left-0 flex flex-col sm:flex-row 
+                  items-stretch sm:items-center justify-between gap-3 mt-6 py-4 border-t z-10"
+              >
                 <Button
                   variant="outline"
                   onClick={handleSaveDraft}
-                  className="w-full sm:w-auto"
+                  className="w-full sm:w-auto cursor-pointer py-6 px-4 text-foreground hover:text-foreground rounded-sm"
                 >
                   Save as Draft
                 </Button>
                 <div className="flex flex-col sm:flex-row gap-2">
                   <Button
                     variant="outline"
-                    className="gap-2 w-full sm:w-auto"
+                    className="gap-2 w-full sm:w-auto cursor-pointer py-6 px-8 rounded-sm font-semibold text-foreground"
                     onClick={() => setScheduleModalOpen(true)}
                   >
                     <Calendar className="h-4 w-4" />
                     {scheduledDate ? `Scheduled: ${scheduledTime}` : "Schedule"}
                   </Button>
-                  <Button onClick={handlePostNow} className="w-full sm:w-auto">
-                    Post now
+                  <Button
+                    variant={"default"}
+                    onClick={handlePostNow}
+                    className="w-full bg-primary hover:bg-primary/80 font-semibold sm:w-auto py-6 px-6 rounded-sm cursor-pointer"
+                  >
+                    Post Now
                   </Button>
                 </div>
               </div>
             </div>
 
             {/* Right Panel - Preview */}
-            <div className="bg-muted w-[40%] border-t lg:border-t-0 lg:border-l p-4 md:p-6 overflow-y-auto">
+            <div className="bg-muted w-[40%] h-[90vh] border-t lg:border-t-0 lg:border-l p-4 md:p-6">
               <div className="flex items-center gap-2 mb-4">
-                <h3 className="text-sm font-medium text-foreground">
+                <h3 className="text-md font-medium text-foreground">
                   Media Preview
                 </h3>
-                <div className="w-4 h-4 rounded-full border-2 border-muted-foreground flex items-center justify-center">
-                  <span className="text-[10px] text-muted-foreground">i</span>
-                </div>
+                <Info className="w-4 h-4 text-muted-foreground" />
               </div>
 
               {/* Instagram Preview */}
-              <div className="bg-background rounded-lg shadow-sm overflow-hidden max-w-md mx-auto">
-                {/* Header */}
-                <div className="flex items-center justify-between p-3 border-b">
-                  <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
-                      <div className="w-7 h-7 rounded-full bg-background flex items-center justify-center">
-                        <div className="w-6 h-6 rounded-full bg-primary" />
+              <ScrollArea className="h-[82vh] py-8">
+                <div className="bg-background rounded-lg flex-1 shadow-sm max-w-md mx-auto">
+                  {/* Header */}
+                  <div className="flex items-center justify-between p-3 border-b">
+                    <div className="flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
+                        <div className="w-7 h-7 rounded-full bg-background flex items-center justify-center">
+                          <div className="w-6 h-6 rounded-full bg-primary" />
+                        </div>
                       </div>
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-1">
-                        <span className="text-sm font-semibold">ramsaanap</span>
-                        <svg
-                          className="w-3 h-3 text-blue-500"
-                          viewBox="0 0 24 24"
-                          fill="currentColor"
-                        >
-                          <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                      </div>
-                      <p className="text-[10px] text-muted-foreground">
-                        Lonar, Maharashtra
-                      </p>
-                    </div>
-                  </div>
-                  <Button variant="ghost" size="icon" className="h-8 w-8">
-                    <span className="text-xl">⋯</span>
-                  </Button>
-                </div>
-
-                {/* Image */}
-                <div className="aspect-square bg-muted relative">
-                  {uploadedImages.length > 0 ? (
-                    <img
-                      src={uploadedImages[0].url}
-                      alt="Post preview"
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center">
-                      <div className="text-center">
-                        <ImageIcon className="h-12 w-12 mx-auto mb-2 text-muted-foreground" />
-                        <p className="text-sm text-muted-foreground">
-                          No image added yet
+                      <div>
+                        <div className="flex items-center gap-1">
+                          <span className="text-sm font-semibold">
+                            ramsaanap
+                          </span>
+                          <svg
+                            className="w-3 h-3 text-blue-500"
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                          >
+                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                        </div>
+                        <p className="text-[10px] text-muted-foreground">
+                          Lonar, Maharashtra
                         </p>
                       </div>
                     </div>
-                  )}
-                  {uploadedImages.length > 1 && (
-                    <div className="absolute bottom-2 right-2 w-6 h-6 rounded-full bg-background/80 flex items-center justify-center">
-                      <span className="text-xs">🖼️</span>
-                    </div>
-                  )}
-                </div>
-
-                {/* Actions */}
-                <div className="p-3 space-y-2">
-                  <div className="flex items-center justify-between">
-                    <div className="flex gap-3">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8 p-0"
-                      >
-                        <svg
-                          className="w-6 h-6"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                          />
-                        </svg>
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8 p-0"
-                      >
-                        <svg
-                          className="w-6 h-6"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-                          />
-                        </svg>
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8 p-0"
-                      >
-                        <svg
-                          className="w-6 h-6"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-                          />
-                        </svg>
-                      </Button>
-                    </div>
-                    <Button variant="ghost" size="icon" className="h-8 w-8 p-0">
-                      <svg
-                        className="w-6 h-6"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
-                        />
-                      </svg>
+                    <Button variant="ghost" size="icon" className="h-8 w-8">
+                      <span className="text-xl">⋯</span>
                     </Button>
                   </div>
 
-                  {uploadedImages.length > 1 && (
-                    <div className="flex gap-1">
-                      {uploadedImages.slice(0, 5).map((_, i) => (
-                        <div
-                          key={i}
-                          className={`h-1.5 rounded-full ${
-                            i === 0
-                              ? "w-6 bg-primary"
-                              : "w-1.5 bg-muted-foreground/30"
-                          }`}
-                        />
-                      ))}
-                    </div>
-                  )}
+                  {/* Image */}
+                  <div className="aspect-square bg-muted-foreground/18 relative">
+                    {uploadedImages.length > 0 ? (
+                      <img
+                        src={uploadedImages[0].url}
+                        alt="Post preview"
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <div className="text-center">
+                          <Image
+                            src={preview}
+                            alt="No Preview"
+                            draggable={false}
+                            className="w-50 object-cover"
+                          />
+                          {/* <ImageIcon className="h-12 w-12 mx-auto mb-2 text-muted-foreground" /> */}
+                          <p className="text-sm text-muted-foreground">
+                            No Preview yet!
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                    {uploadedImages.length > 1 && (
+                      <div className="absolute bottom-2 right-2 w-6 h-6 rounded-full bg-background/80 flex items-center justify-center">
+                        <span className="text-xs">🖼️</span>
+                      </div>
+                    )}
+                  </div>
 
-                  <div>
-                    <p className="text-xs">
-                      <span className="font-semibold">ramsaanap</span>{" "}
-                      <span className="text-muted-foreground">
-                        {caption || "Your caption will appear here..."}
-                      </span>
-                    </p>
-                    <p className="text-xs text-muted-foreground mt-1">
-                      View 1 comment
-                    </p>
+                  {/* Actions */}
+                  <div className="p-3 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <div className="flex gap-3">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 p-0"
+                        >
+                          <svg
+                            className="w-6 h-6"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                            />
+                          </svg>
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 p-0"
+                        >
+                          <svg
+                            className="w-6 h-6"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                            />
+                          </svg>
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 p-0"
+                        >
+                          <svg
+                            className="w-6 h-6"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                            />
+                          </svg>
+                        </Button>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 p-0"
+                      >
+                        <svg
+                          className="w-6 h-6"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
+                          />
+                        </svg>
+                      </Button>
+                    </div>
+
+                    {uploadedImages.length > 1 && (
+                      <div className="flex gap-1">
+                        {uploadedImages.slice(0, 5).map((_, i) => (
+                          <div
+                            key={i}
+                            className={`h-1.5 rounded-full ${
+                              i === 0
+                                ? "w-6 bg-primary"
+                                : "w-1.5 bg-muted-foreground/30"
+                            }`}
+                          />
+                        ))}
+                      </div>
+                    )}
+
+                    <div>
+                      <p className="text-xs">
+                        <span className="font-semibold">ramsaanap</span>{" "}
+                        <span className="text-muted-foreground">
+                          {caption || "Your caption will appear here..."}
+                        </span>
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        View 1 comment
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </ScrollArea>
             </div>
           </div>
         </DialogContent>

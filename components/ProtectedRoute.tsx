@@ -14,6 +14,8 @@ export default function ProtectedRoute({
   const router = useRouter();
   const accessToken = useSelector((state: RootState) => state.auth.accessToken);
 
+  console.log("accessToken", accessToken)
+
   useEffect(() => {
     if (!accessToken) {
       router.replace("/auth/login");

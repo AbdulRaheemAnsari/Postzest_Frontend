@@ -4,112 +4,90 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Upload, Wand2, ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { Separator } from "@/components/ui/separator";
+import { motion } from "framer-motion";
+
+const aiTemplates = [
+  {
+    id: 1,
+    icon: <Upload className="w-6 h-6 text-primary" />,
+    label: "New",
+    title: "Bulk Video Upload",
+    description:
+      "Upload, manage, and schedule multiple videos across all your platforms all at once. Save hours of manual work.",
+    buttonText: "Create in Bulk",
+    url: "/dashboard/bulk-tools/create/video-upload",
+  },
+  {
+    id: 2,
+    icon: <Wand2 className="w-6 h-6 text-primary" />,
+    label: "New",
+    title: "Bulk Video Creation",
+    description:
+      "Generate and customize AI-powered 2×2 grid videos for campaigns or social posts in seconds. Create at scale effortlessly.",
+    buttonText: "Create with AI",
+    url: "/dashboard/bulk-tools/create/video-creation",
+  },
+];
 
 export default function BulkTools() {
   const router = useRouter();
   return (
-    <section className="w-full">
-      <div className="">
-        {/* Header */}
-        <div className="mb-10">
-          <h2 className="text-2xl font-semibold tracking-tight mb-4 bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 bg-clip-text text-transparent">
-            Bulk Tools
-          </h2>
-          <p className="text-lg text-muted-foreground">
-            Streamline your workflow with powerful automation tools
-          </p>
-        </div>
+    <>
+      <section className="py-4">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex items-center gap-2 mb-8">
+            <h2 className="text-3xl font-semibold tracking-tight">
+              Bulk Tools
+            </h2>
+          </div>
 
-        {/* Cards Grid */}
-        <div className="grid gap-8 md:grid-cols-2">
-          {/* Bulk Video Upload Card */}
-          <Card className="group relative overflow-hidden border-0 bg-white/80 backdrop-blur-sm  shadow-[var(--shadow-hover)] transition-all duration-500">
-            {/* Gradient Border Effect */}
-            <div className="absolute inset-0 bg-gradient-to-br from-green-500/20 via-transparent to-green-600/20 opacity-100 transition-opacity duration-500" />
-
-            <CardContent className="relative p-8 md:p-10">
-              {/* Icon Container */}
-              <div className="relative mb-6">
-                <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-green-500 to-green-600 shadow-lg shadow-green-500/50 transition-all duration-500 group-hover:scale-110">
-                  <Upload className="w-8 h-8 text-white" />
+          <div className="grid gap-4 md:grid-cols-3">
+            {aiTemplates.map((template) => (
+              <motion.div
+                key={template.id}
+                whileHover={{ y: -4 }}
+                transition={{ type: "spring", stiffness: 200 }}
+                className="relative group rounded-lg border border-primary/5 bg-white/70 backdrop-blur-md shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden"
+              >
+                {/* Header */}
+                <div className="flex items-center justify-between p-5">
+                  <div className="flex items-center gap-2">
+                    <div className="p-2 bg-primary/5 rounded-lg">
+                      {template.icon}
+                    </div>
+                    <span className="text-xs font-medium px-2 py-1 bg-primary/5 text-primary rounded-full">
+                      {template.label}
+                    </span>
+                  </div>
                 </div>
-                <Badge className="absolute -top-1 -right-1 bg-green-100 text-green-700 border-green-200 font-semibold px-3 py-1">
-                  NEW
-                </Badge>
-              </div>
 
-              {/* Content */}
-              <div className="space-y-4">
-                <h3 className="text-2xl font-bold text-slate-900 group-hover:text-green-600 transition-colors duration-300">
-                  Bulk Video Upload
-                </h3>
-                <p className="text-slate-600 leading-relaxed">
-                  Upload, manage, and schedule multiple videos across all your
-                  platforms — all at once. Save hours of manual work.
-                </p>
+                <Separator className="bg-primary/10" />
+                {/* Content */}
+                <div className="p-5 space-y-3">
+                  <h3 className="text-lg font-semibold text-gray-900">
+                    {template.title}
+                  </h3>
+                  <p className="text-sm text-gray-600 leading-relaxed">
+                    {template.description}
+                  </p>
+                </div>
 
                 {/* Button */}
-                <Button
-                  onClick={() =>
-                    router.push("/dashboard/bulk-tools/create/video-upload")
-                  }
-                  className="w-full mt-6 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white shadow-lg shadow-green-500/30 hover:shadow-green-500/50 transition-all duration-300 group/btn"
-                >
-                  <span>Upload in Bulk</span>
-                  <ArrowRight className="ml-2 w-4 h-4 group-hover/btn:translate-x-1 transition-transform duration-300" />
-                </Button>
-              </div>
-
-              {/* Decorative Elements */}
-              <div className="absolute -bottom-4 -right-4 w-24 h-24 rounded-full blur-2xl bg-green-500/10 transition-all duration-500" />
-            </CardContent>
-          </Card>
-
-          {/* Bulk Video Creation Card */}
-          <Card className="group relative overflow-hidden border-0 bg-white/80 backdrop-blur-sm shadow-[var(--shadow-modern)] hover:shadow-[var(--shadow-hover)] transition-all duration-500">
-            {/* Gradient Border Effect */}
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 via-transparent to-purple-600/20 opacity-100 transition-opacity duration-500" />
-
-            <CardContent className="relative p-8 md:p-10">
-              {/* Icon Container */}
-              <div className="relative mb-6">
-                <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-purple-600 shadow-lg shadow-purple-500/30 group-hover:shadow-purple-500/50 transition-all duration-500 group-hover:scale-110">
-                  <Wand2 className="w-8 h-8 text-white" />
+                <div className="p-5 pt-0">
+                  <Button
+                    onClick={() => router.push(template?.url)}
+                    className="w-full flex items-center gap-1 py-6 text-sm font-semibold bg-primary text-background rounded-md cursor-pointer hover:bg-primary mt-4 transition-all duration-300 group/btn"
+                  >
+                    <span> {template.buttonText}</span>
+                    <ArrowRight className=" w-4 h-4 group-hover/btn:translate-x-1 transition-transform duration-300" />
+                  </Button>
                 </div>
-                <Badge className="absolute -top-1 -right-1 bg-purple-100 text-purple-700 border-purple-200 font-semibold px-3 py-1">
-                  NEW
-                </Badge>
-              </div>
-
-              {/* Content */}
-              <div className="space-y-4">
-                <h3 className="text-2xl font-bold text-slate-900 group-hover:text-purple-600 transition-colors duration-300">
-                  Bulk Video Creation
-                </h3>
-                <p className="text-slate-600 leading-relaxed">
-                  Generate and customize AI-powered 2×2 grid videos for
-                  campaigns or social posts in seconds. Create at scale
-                  effortlessly.
-                </p>
-
-                {/* Button */}
-                <Button
-                  onClick={() =>
-                    router.push("/dashboard/bulk-tools/create/video-creation")
-                  }
-                  className="w-full mt-6 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50 transition-all duration-300 group/btn"
-                >
-                  <span>Create with AI</span>
-                  <ArrowRight className="ml-2 w-4 h-4 group-hover/btn:translate-x-1 transition-transform duration-300" />
-                </Button>
-              </div>
-
-              {/* Decorative Elements */}
-              <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-purple-500/5 rounded-full blur-2xl group-hover:bg-purple-500/10 transition-all duration-500" />
-            </CardContent>
-          </Card>
+              </motion.div>
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }

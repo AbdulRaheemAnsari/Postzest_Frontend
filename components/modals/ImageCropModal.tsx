@@ -95,7 +95,7 @@ export const ImageCropModal = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-[840px] p-0 gap-0">
+      <DialogContent className="!max-w-[640px] h-[74vh] overflow-y-scroll p-0 gap-0">
         <div className="p-6">
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
@@ -112,14 +112,6 @@ export const ImageCropModal = ({
                 </p>
               </div>
             </div>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => onOpenChange(false)}
-              className="h-8 w-8"
-            >
-              <X className="h-4 w-4" />
-            </Button>
           </div>
 
           {/* Crop Area */}
@@ -151,12 +143,12 @@ export const ImageCropModal = ({
           </div>
 
           {/* Filter Selection */}
-          <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
+          <div className="flex gap-2 mb-6 overflow-x-auto py-2 px-2">
             {gradientFilters.map((filter) => (
-              <button
+              <Button
                 key={filter.id}
                 onClick={() => setSelectedFilter(filter.id)}
-                className={`w-10 h-10 rounded-full flex-shrink-0 transition-all ${
+                className={`w-10 h-10 rounded-full flex-shrink-0 transition-all cursor-pointer ${
                   selectedFilter === filter.id
                     ? "ring-2 ring-primary ring-offset-2"
                     : "hover:scale-110"
@@ -164,9 +156,7 @@ export const ImageCropModal = ({
                 style={{ background: filter.gradient }}
               />
             ))}
-            <button className="w-10 h-10 rounded-full flex-shrink-0 border-2 border-dashed border-muted-foreground/30 flex items-center justify-center hover:border-muted-foreground/50 transition-colors">
-              <span className="text-muted-foreground text-lg">+</span>
-            </button>
+           
           </div>
 
           {/* Footer */}
@@ -187,10 +177,20 @@ export const ImageCropModal = ({
               </label>
             </div>
             <div className="flex gap-2">
-              <Button variant="outline" onClick={() => onOpenChange(false)}>
+              <Button
+                variant="outline"
+                className=" rounded-sm py-6 px-6 cursor-pointer font-medium"
+                onClick={() => onOpenChange(false)}
+              >
                 Cancel
               </Button>
-              <Button onClick={handleConfirm}>Confirm</Button>
+              <Button
+                variant={"default"}
+                className="bg-primary hover:bg-primary/80 rounded-sm py-6 px-6 cursor-pointer font-semibold"
+                onClick={handleConfirm}
+              >
+                Confirm
+              </Button>
             </div>
           </div>
         </div>

@@ -5,12 +5,15 @@ import { Badge } from "@/components/ui/badge";
 import { Calendar, CreditCard, Receipt } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import CancelTrailModal from "@/components/modals/CancelTrailModal";
+import { useState } from "react";
 
 const Billing = () => {
-    const router = useRouter()
+  const router = useRouter();
+  const [IsTrailCancel, setIsTrailCancel] = useState(false);
   return (
     <div className="min-h-screen bg-background py-4">
-      <div>
+      <div className="container max-w-3xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
         <h1 className="text-3xl font-semibold mb-6">Billing</h1>
 
         {/* Info Banner */}
@@ -76,7 +79,7 @@ const Billing = () => {
 
           <div className="flex flex-wrap gap-3 px-6 md:px-8 border-t border-border pt-4">
             <Button
-            onClick={() => router.push('/settings/subscription')}
+              onClick={() => router.push("/settings/subscription")}
               variant="default"
               className="bg-primary hover:bg-primary/90 cursor-pointer"
             >
@@ -89,6 +92,7 @@ const Billing = () => {
               Pause Subscription
             </Button>
             <Button
+            onClick={() => setIsTrailCancel(true)}
               variant="outline"
               className="bg-foreground text-background hover:bg-foreground/90 hover:text-background cursor-pointer"
             >
@@ -109,6 +113,8 @@ const Billing = () => {
           </Button>
         </div>
       </div>
+
+      <CancelTrailModal open={IsTrailCancel} onOpenChange={setIsTrailCancel} />
     </div>
   );
 };

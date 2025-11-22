@@ -65,7 +65,7 @@ const Preferences = () => {
 
   return (
     <div className=" bg-background py-4">
-      <div className="space-y-8">
+      <div className="space-y-8 container max-w-3xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
         {/* Header */}
         <h1 className="text-3xl font-semibold text-foreground">Preferences</h1>
 
