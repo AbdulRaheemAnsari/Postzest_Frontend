@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import { toast } from "sonner";
+import { toast } from "react-toastify";
 import { CreateTagSheet } from "@/components/common/CreateTagSheet";
 import { TagsGrid } from "@/components/common/TagsGrid";
 import { TagsEmptyState } from "@/components/common/TagsEmptyState";

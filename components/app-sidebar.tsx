@@ -4,6 +4,7 @@ import * as React from "react";
 import {
   CalendarCheck,
   CalendarDays,
+  FileChartColumnIncreasing,
   FilePenLine,
   FilePlus,
   FileText,
@@ -68,6 +69,23 @@ const data = {
         },
       ],
     },
+    {
+      title: "Reports",
+      items: [
+        {
+          title: "Dashboard",
+          url: "/dashboard",
+          icon: LayoutDashboard,
+        },
+        {
+          title: "Analytics",
+          url: "/dashboard/analytics",
+          icon: FileChartColumnIncreasing,
+        },
+       
+      ],
+    },
+
     {
       title: "Content Menu",
       items: [

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Copy, Share2, Gift, Users, TrendingUp, Sparkles } from "lucide-react";
-import { toast } from "sonner";
+import { toast } from "react-toastify";
 
 const ReferralCard = () => {
   const [referralLink] = useState(
@@ -13,9 +13,7 @@ const ReferralCard = () => {
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(referralLink);
-    toast.success("Copied!", {
-      description: "Your referral link is ready to share.",
-    });
+    toast.success("Referral link copied to clipboard!");
   };
 
   const handleShare = () => {

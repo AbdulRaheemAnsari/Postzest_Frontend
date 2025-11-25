@@ -9,6 +9,7 @@ import {
   Plus,
   Settings,
   Sparkles,
+  User,
 } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -94,9 +95,9 @@ export function NavUser({
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+              className="data-[state=open]:bg-sidebar-accent outline-none border-none focus:ring-0 data-[state=open]:text-sidebar-accent-foreground cursor-pointer"
             >
-              <Avatar className="h-8 w-8 rounded-lg">
+              <Avatar className="h-8 w-8 rounded-full">
                 <AvatarImage src={user.avatar} alt={user.name} />
                 <AvatarFallback className="rounded-lg">CN</AvatarFallback>
               </Avatar>
@@ -113,7 +114,7 @@ export function NavUser({
             align="end"
             sideOffset={4}
           >
-            {/* Current User */}
+            {/* Current User
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
@@ -125,7 +126,44 @@ export function NavUser({
                   <span className="truncate text-xs">{user.email}</span>
                 </div>
               </div>
-            </DropdownMenuLabel>
+            </DropdownMenuLabel> */}
+
+            {/* Other Menu Items */}
+            <DropdownMenuGroup>
+              <DropdownMenuItem
+                onClick={() => router.push("/settings/subscription")}
+                className="cursor-pointer font-medium"
+              >
+                <Sparkles />
+                Upgrade to Pro
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+
+            <DropdownMenuSeparator />
+
+            <DropdownMenuGroup>
+              <DropdownMenuItem
+                onClick={() => router.push("/settings/profile")}
+                className="cursor-pointer font-medium"
+              >
+                <User strokeWidth={2} />
+                View Profile
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => router.push("/settings/billing")}
+                className="cursor-pointer font-medium"
+              >
+                <CreditCard />
+                Billing
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => router.push("/settings/profile")}
+                className="cursor-pointer font-medium"
+              >
+                <Settings />
+                Account Settings
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
 
             <DropdownMenuSeparator />
 
@@ -141,14 +179,18 @@ export function NavUser({
                 className="flex items-center gap-2 cursor-pointer py-2"
                 onClick={() => switchWorkspace(ws.id)}
               >
-                <Avatar className="h-8 w-8 rounded-lg">
+                <Avatar className="h-8 w-8 rounded-full !bg-amber-400">
                   <AvatarImage src={ws.avatar} alt={ws.name} />
                   <AvatarFallback className="rounded-lg">WS</AvatarFallback>
                 </Avatar>
 
                 <div className="grid flex-1 leading-tight text-sm">
-                  <span className="truncate font-medium">{ws.name}</span>
-                  <span className="truncate text-xs">{ws.email}</span>
+                  <span className="truncate font-semibold text-xs">
+                    {ws.name}
+                  </span>
+                  <span className="truncate text-muted-foreground text-xs">
+                    {ws.email}
+                  </span>
                 </div>
 
                 {/* Active workspace indicator */}
@@ -162,45 +204,21 @@ export function NavUser({
 
             {/* Add Workspace */}
             <DropdownMenuItem
-              className="cursor-pointer mt-1"
+              className="cursor-pointer transition-colors hover:bg-muted-foreground/6 flex items-center justify-center gap-1 font-semibold text-foreground mt-1 border border-muted-foreground/30"
               onClick={addWorkspace}
             >
-              <Plus className="mr-2 h-4 w-4" />
+              <Plus strokeWidth={3} className=" h-4 w-4" />
               Add workspace
             </DropdownMenuItem>
 
             <DropdownMenuSeparator />
 
-            {/* Other Menu Items */}
-            <DropdownMenuGroup>
-              <DropdownMenuItem className="cursor-pointer">
-                <Sparkles />
-                Upgrade to Pro
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-
-            <DropdownMenuSeparator />
-
-            <DropdownMenuGroup>
-              <DropdownMenuItem className="cursor-pointer">
-                <BadgeCheck />
-                Account
-              </DropdownMenuItem>
-              <DropdownMenuItem className="cursor-pointer">
-                <CreditCard />
-                Billing
-              </DropdownMenuItem>
-              <DropdownMenuItem className="cursor-pointer">
-                <Settings />
-                Settings
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-
-            <DropdownMenuSeparator />
-
-            <DropdownMenuItem className="cursor-pointer" onClick={handleLogout}>
+            <DropdownMenuItem
+              className="cursor-pointer font-medium"
+              onClick={handleLogout}
+            >
               <LogOut />
-              Log out
+              Sign out
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

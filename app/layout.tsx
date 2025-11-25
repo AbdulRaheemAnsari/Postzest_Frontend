@@ -7,7 +7,7 @@ import { Toaster } from "sonner";
 import ClientModals from "@/components/modals/ClientModals";
 import GlobalLoaderProvider from "@/components/common/GlobalLoaderProvider";
 import ConditionalLayout from "@/components/common/ConditionalLayout";
- import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer, toast } from "react-toastify";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

@@ -1,62 +1,93 @@
 "use client";
-import React, { useState } from "react";
+import { useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils";
+import { Eye, EyeOff } from "lucide-react";
 
 interface FloatingInputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
-  id: string;
   icon?: React.ReactNode;
   parentClassName?: string;
 }
 
-const FloatingInput: React.FC<FloatingInputProps> = ({
+const FloatingInput = ({
   label,
-  id,
   icon,
+  className,
+  id,
   parentClassName,
+  type,
   ...props
-}) => {
-  const [focused, setFocused] = useState(false);
-  const [hasValue, setHasValue] = useState(!!props.value);
+}: FloatingInputProps) => {
+  const [isFocused, setIsFocused] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [hasValue, setHasValue] = useState(
+    !!props.value || !!props.defaultValue
+  );
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setHasValue(e.target.value !== "");
+    if (props.onChange) {
+      props.onChange(e);
+    }
+  };
+
+  const isPassword = type === "password";
 
   return (
-    <div className={`relative w-full ${parentClassName ?? ""}`}>
+    <div className={`relative ${parentClassName}`}>
       {icon && (
-        <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none">
+        <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none z-10 text-muted-foreground">
           {icon}
         </div>
       )}
 
-      <input
-        id={id}
-        {...props}
-        onFocus={(e) => {
-          setFocused(true);
-          props.onFocus?.(e);
-        }}
-        onBlur={(e) => {
-          setFocused(false);
-          setHasValue(!!e.target.value);
-          props.onBlur?.(e);
-        }}
-        className={`peer w-full rounded-lg border border-input-border !bg-transparent 
-          ${icon ? "pl-10 pr-4" : "px-4"} pt-5 pb-2 text-base text-foreground
-          focus:border-primary focus:ring-0 focus:outline-none transition-all duration-200`}
-        placeholder=" "
-      />
+      {/* Eye Icon for password */}
+      {isPassword && (
+        <button
+          type="button"
+          onClick={() => setShowPassword(!showPassword)}
+          className="absolute right-4 top-1/2 -translate-y-1/2 z-20 text-muted-foreground"
+        >
+          {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+        </button>
+      )}
 
-      <label
+      <Input
+        id={id}
+        type={isPassword && showPassword ? "text" : type}
+        className={cn(
+          "peer h-14 transition-all bg-background pr-12 text-md",
+          icon ? "pl-12" : "pl-4",
+          "border-border hover:border-primary/50 focus:border-primary",
+          "focus-visible:ring-1 focus-visible:ring-primary",
+          isFocused || hasValue ? "py-2" : "py-2",
+          className
+        )}
+        onFocus={() => setIsFocused(true)}
+        onBlur={(e) => {
+          setIsFocused(false);
+          setHasValue(e.target.value !== "");
+        }}
+        onChange={handleChange}
+        {...props}
+      />
+      <Label
         htmlFor={id}
-        className={`absolute transition-all duration-200 bg-background px-1
-          ${icon ? "left-10" : "left-4"}
-          ${
-            focused || hasValue
-              ? "-top-2 text-xs text-foreground"
-              : "top-3.5 text-base text-muted-foreground"
-          }`}
+        className={cn(
+          "absolute transition-all pointer-events-none font-medium duration-200",
+          icon ? "left-12" : "left-4",
+          isFocused || hasValue
+            ? `-top-1.5 text-xs ${
+                icon && "left-10"
+              } px-1 bg-background text-xs text-muted-foreground`
+            : "top-1/2 -translate-y-1/2 text-md text-muted-foreground"
+        )}
       >
         {label}
-      </label>
+      </Label>
     </div>
   );
 };
