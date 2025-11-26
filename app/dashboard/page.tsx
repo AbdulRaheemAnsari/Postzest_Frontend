@@ -231,7 +231,7 @@ const Dashboard = () => {
       </div>
 
       {/* Sentiment Analysis */}
-      <SentimentAnalysis />
+      {/* <SentimentAnalysis /> */}
 
       {/* Content Ideas & Team Activity */}
       <div className="grid gap-6 lg:grid-cols-2">
