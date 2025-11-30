@@ -31,6 +31,7 @@ import { Spinner } from "./ui/spinner";
 import { useDispatch } from "react-redux";
 import { setAuthData } from "@/store/slices/authSlice";
 import Image from "next/image";
+import { Lock, Mail } from "lucide-react";
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email address." }),
@@ -108,10 +109,9 @@ export function LoginForm({
                     <FormItem>
                       <FormControl>
                         <FloatingInput
-                          {...field}
                           label="Email"
-                          type="email"
                           id="email"
+                          {...field}
                         />
                       </FormControl>
                       <FormMessage className="text-xs" />
@@ -126,10 +126,10 @@ export function LoginForm({
                     <FormItem>
                       <FormControl>
                         <FloatingInput
-                          {...field}
                           label="Password"
                           type="password"
                           id="password"
+                          {...field}
                         />
                       </FormControl>
                       <FormMessage className="text-xs" />

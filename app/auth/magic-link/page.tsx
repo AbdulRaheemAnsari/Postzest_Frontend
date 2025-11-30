@@ -59,12 +59,7 @@ const MagicLink = () => {
               render={({ field }) => (
                 <FormItem className="w-full pt-4">
                   <FormControl>
-                    <FloatingInput
-                      {...field}
-                      label="Email"
-                      type="email"
-                      id="email"
-                    />
+                    <FloatingInput label="Email" id="email" {...field} />
                   </FormControl>
                   <FormMessage className="text-xs" />
                 </FormItem>

@@ -2,8 +2,10 @@ import { Button } from "@/components/ui/button";
 import logo from "@/assets/images/postzestlogo.png"
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const Header = () => {
+  const router = useRouter()
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-accent backdrop-blur-md">
       <div className="container mx-auto py-2">
@@ -42,13 +44,11 @@ const Header = () => {
 
          <div className="flex items-center gap-1.5">
            <Button
+           onClick={() => router.push("/auth/login")}
            variant={"outline"}
            className=" text-foreground py-5 bg-transparent px-6 hover:bg-muted cursor-pointer">
             Login
           </Button>
-           {/* <Button className="bg-primary py-6 px-6 text-background hover:bg-primary/80 cursor-pointer">
-            Start free trail
-          </Button> */}
          </div>
         </div>
       </div>

@@ -32,6 +32,7 @@ import { Spinner } from "./ui/spinner";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { Lock, Mail, User } from "lucide-react";
 
 export function SignUpForm({
   className,
@@ -127,10 +128,9 @@ export function SignUpForm({
                     <FormItem>
                       <FormControl>
                         <FloatingInput
+                          label="First Name"
+                          id="firstName"
                           {...field}
-                          label="Name"
-                          type="text"
-                          id="name"
                         />
                       </FormControl>
                       <FormMessage className="text-xs" />
@@ -144,11 +144,10 @@ export function SignUpForm({
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
-                        <FloatingInput
-                          {...field}
+                          <FloatingInput
                           label="Email"
-                          type="email"
                           id="email"
+                          {...field}
                         />
                       </FormControl>
                       <FormMessage className="text-xs" />
@@ -163,10 +162,10 @@ export function SignUpForm({
                     <FormItem>
                       <FormControl>
                         <FloatingInput
-                          {...field}
                           label="Password"
                           type="password"
                           id="password"
+                          {...field}
                         />
                       </FormControl>
                       <FormMessage className="text-xs" />

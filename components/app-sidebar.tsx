@@ -67,12 +67,7 @@ const data = {
           url: "/dashboard/bulk-tools",
           icon: Layers,
         },
-      ],
-    },
-    {
-      title: "Reports",
-      items: [
-        {
+         {
           title: "Dashboard",
           url: "/dashboard",
           icon: LayoutDashboard,
@@ -82,10 +77,8 @@ const data = {
           url: "/dashboard/analytics",
           icon: FileChartColumnIncreasing,
         },
-       
       ],
     },
-
     {
       title: "Content Menu",
       items: [

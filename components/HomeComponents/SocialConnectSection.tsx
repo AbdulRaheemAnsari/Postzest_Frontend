@@ -16,6 +16,7 @@ import youtube from "@/assets/images/youtube.png";
 import threads from "@/assets/images/threads.png";
 import bluesky from "@/assets/images/bluesky.png";
 import pinterest from "@/assets/images/pinterest.png";
+import mastodon from "@/assets/images/mastodon.png";
 import Image from "next/image";
 
 const SocialConnectSection = () => {
@@ -25,12 +26,6 @@ const SocialConnectSection = () => {
       Icon: bluesky,
       color: "#0085FF",
       bgColor: "hsl(211, 100%, 50%)",
-    },
-    {
-      name: "Facebook",
-      Icon: facebook,
-      color: "#1877F2",
-      bgColor: "hsl(214, 89%, 52%)",
     },
     // {
     //   name: "Google",
@@ -44,30 +39,37 @@ const SocialConnectSection = () => {
       color: "#E4405F",
       bgColor: "hsl(349, 77%, 57%)",
     },
+     {
+      name: "Facebook",
+      Icon: facebook,
+      color: "#1877F2",
+      bgColor: "hsl(214, 89%, 52%)",
+    },
+     {
+      name: "Threads",
+      Icon: threads,
+      color: "#000000",
+      bgColor: "hsl(0, 0%, 0%)",
+    },
     {
       name: "LinkedIn",
       Icon: linkedin,
       color: "#0A66C2",
       bgColor: "hsl(201, 92%, 40%)",
     },
-    // {
-    //   name: "Mastodon",
-    //   Icon: MessageSquare,
-    //   color: "#6364FF",
-    //   bgColor: "hsl(240, 100%, 69%)",
-    // },
+    {
+      name: "Mastodon",
+      Icon: mastodon,
+      color: "#6364FF",
+      bgColor: "hsl(240, 100%, 69%)",
+    },
     {
       name: "Pinterest",
       Icon: pinterest,
       color: "#E60023",
       bgColor: "hsl(352, 98%, 45%)",
     },
-    {
-      name: "Threads",
-      Icon: threads,
-      color: "#000000",
-      bgColor: "hsl(0, 0%, 0%)",
-    },
+   
     {
       name: "TikTok",
       Icon: tiktok,
@@ -130,7 +132,7 @@ const SocialConnectSection = () => {
               {/* Glow effect on hover */}
               <div
                 className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-20 blur-xl transition-opacity duration-300"
-                style={{ backgroundColor: bgColor }}
+                // style={{ backgroundColor: bgColor }}
               />
             </div>
           ))}
