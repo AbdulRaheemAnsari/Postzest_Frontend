@@ -41,22 +41,21 @@ export default function RootLayout({
           <Providers>
             <ReactQueryProvider>
               <ConditionalLayout>{children}</ConditionalLayout>
+              <ToastContainer
+                position="bottom-right"
+              />
+              <Toaster
+                position="top-right"
+                toastOptions={{
+                  classNames: {
+                    toast: "border-current/25 shadow-lg shadow-current/25",
+                    success: "text-green-600 bg-green-50",
+                    error: "text-red-600 bg-red-50",
+                  },
+                }}
+              />
+              <ClientModals />
             </ReactQueryProvider>
-            <ToastContainer 
-            position="bottom-right"
-            />
-            <Toaster
-              position="top-right"
-              toastOptions={{
-                classNames: {
-                  toast: "border-current/25 shadow-lg shadow-current/25",
-                  success: "text-green-600 bg-green-50",
-                  error: "text-red-600 bg-red-50",
-                },
-              }}
-            />
-
-            <ClientModals />
           </Providers>
         </GlobalLoaderProvider>
       </body>

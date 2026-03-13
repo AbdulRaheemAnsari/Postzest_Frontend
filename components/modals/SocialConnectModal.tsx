@@ -12,6 +12,7 @@ import { RootState } from "@/store";
 import facebook from "@/assets/images/facebook.png";
 import instagram from "@/assets/images/instagram.png";
 import linkedin from "@/assets/images/linkedin.png";
+import { useGetLinkedinAuthUrl } from "@/queries/social/useLinkedinConnect";
 import bluesky from "@/assets/images/bluesky.png";
 import pinterest from "@/assets/images/pinterest.png";
 import youtube from "@/assets/images/youtube.png";
@@ -107,9 +108,17 @@ export const SocialConnectModal = ({ }: SocialConnectModalProps) => {
   const isSocialConnectModalOpen = useSelector(
     (state: RootState) => state.socialConnectModal.socialConnectModalOpen
   );
+  const { refetch: getLinkedinUrl } = useGetLinkedinAuthUrl();
 
-  const handleConnect = (accountId: string) => {
-    console.log(`Connecting to ${accountId}`);
+  const handleConnect = async (accountId: string) => {
+    if (accountId === "linkedin") {
+      const { data: url } = await getLinkedinUrl();
+      if (url) {
+        window.location.href = url;
+      }
+    } else {
+      console.log(`Connecting to ${accountId}`);
+    }
   };
 
   return (

@@ -8,18 +8,61 @@ import AddSocialAccountField from "@/components/common/AddSocialAccountField";
 import SocialAccountCard from "@/components/common/SocialAccountCard";
 import { useDispatch } from "react-redux";
 import { openSocialConnectModal } from "@/store/slices/socialConnectModalSlice";
-import { accounts } from "@/data/mockPosts";
+// remove mock posts import: import { accounts } from "@/data/mockPosts";
+import { useSocialAccounts } from "@/queries/social/useSocialAccounts";
+import { useConnectLinkedin } from "@/queries/social/useLinkedinConnect";
+import { useEffect, Suspense, useRef } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 
-export default function SocialAccounts() {
+// Define a type for the account from API
+interface SocialAccountAPI {
+  _id: string;
+  platform: string;
+  username: string;
+  accountId: string;
+}
+
+function SocialAccountsContent() {
   const dispatch = useDispatch();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const queryClient = useQueryClient();
 
-  const handleDisconnect = (id: number) => {
+  const { data: accounts, isLoading } = useSocialAccounts();
+  const { mutate: connectLinkedin, isPending: isConnecting } = useConnectLinkedin();
+
+  const codeProcessedRef = useRef(false);
+
+  useEffect(() => {
+    const code = searchParams.get("code");
+    if (code && !codeProcessedRef.current) {
+      codeProcessedRef.current = true;
+      connectLinkedin(code, {
+        onSuccess: () => {
+          toast.success("LinkedIn account connected successfully!");
+          queryClient.invalidateQueries({ queryKey: ["socialAccounts"] });
+          router.replace("/dashboard/social-accounts"); // Clean URL
+        },
+        onError: () => {
+          toast.error("Failed to connect LinkedIn account");
+          router.replace("/dashboard/social-accounts"); // Clean URL even on error
+        },
+      });
+    }
+  }, [searchParams, connectLinkedin, queryClient, router]);
+
+  const handleDisconnect = (id: string | number) => {
     toast("Account Disconnected");
   };
 
-  const handleRefresh = (id: number) => {
+  const handleRefresh = (id: string | number) => {
     toast.success("Connection Refreshed");
   };
+
+  if (isLoading || isConnecting) {
+    return <div className="w-full flex justify-center items-center py-20 bg-background text-foreground">Loading...</div>;
+  }
 
   return (
     <div className="w-full bg-background flex flex-col items-center justify-start">
@@ -42,18 +85,18 @@ export default function SocialAccounts() {
         </div>
       </div>
 
-      {accounts.length > 0 ? (
+      {accounts && accounts.length > 0 ? (
         <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {accounts.map((account) => (
+          {accounts.map((account: SocialAccountAPI) => (
             <SocialAccountCard
-              key={account.id}
+              key={account._id}
               username={account.username}
-              profileImage={account.profileImage}
+              profileImage={""} // TODO: Add profile image if provided by API
               isConnected={true}
-              hasToggle={account.hasToggle}
-              hasRemoveButton={account.hasRemoveButton}
-              onDisconnect={() => handleDisconnect(account.id)}
-              onRefresh={() => handleRefresh(account.id)}
+              hasToggle={true}
+              hasRemoveButton={true}
+              onDisconnect={() => handleDisconnect(account._id)}
+              onRefresh={() => handleRefresh(account._id)}
             />
           ))}
           <AddSocialAccountField />
@@ -83,5 +126,13 @@ export default function SocialAccounts() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function SocialAccounts() {
+  return (
+    <Suspense fallback={<div className="w-full flex justify-center items-center py-20 bg-background text-foreground">Loading...</div>}>
+      <SocialAccountsContent />
+    </Suspense>
   );
 }
