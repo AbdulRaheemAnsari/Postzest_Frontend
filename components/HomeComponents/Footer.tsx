@@ -1,40 +1,51 @@
 import logo from "@/assets/images/postzestlogo.png";
 import Image from "next/image";
+import Link from "next/link";
 
 const Footer = () => {
-  const footerLinks = {
+  const footerLinks: Record<string, { label: string, href: string }[]> = {
     "About us": [
-      "Product",
-      "Features",
-      "Customer Stories",
-      "Our Mission",
-      "Our Values",
+      { label: "Product", href: "#" },
+      { label: "Features", href: "#" },
+      { label: "Customer Stories", href: "#" },
+      { label: "Our Mission", href: "#" },
+      { label: "Our Values", href: "#" },
+      { label: "Privacy Policy", href: "/privacy-policy" },
+      { label: "Terms of Service", href: "/terms-of-service" },
     ],
     Platform: [
-      "Engagement",
-      "Proven analytics",
-      "Employee advocacy",
-      "Analytics",
+      { label: "Engagement", href: "#" },
+      { label: "Proven analytics", href: "#" },
+      { label: "Employee advocacy", href: "#" },
+      { label: "Analytics", href: "#" },
     ],
-    Statistics: ["Customer Care", "Learn Culture", "Professional Data"],
+    Statistics: [
+      { label: "Customer Care", href: "#" },
+      { label: "Learn Culture", href: "#" },
+      { label: "Professional Data", href: "#" },
+    ],
     Resources: [
-      "Special Blog",
-      "Help Certify",
-      "Community",
-      "partner directory",
+      { label: "Special Blog", href: "#" },
+      { label: "Help Certify", href: "#" },
+      { label: "Community", href: "#" },
+      { label: "partner directory", href: "#" },
     ],
     Integrations: [
-      "Facebook scheduler",
-      "Instagram scheduler",
-      "Twitter scheduler",
-      "LinkedIn scheduler",
-      "Tik Tok scheduler",
-      "YouTube scheduler",
-      "Pinterest scheduler",
-      "Threads scheduler",
-      "Bluesky scheduler",
+      { label: "Facebook scheduler", href: "#" },
+      { label: "Instagram scheduler", href: "#" },
+      { label: "Twitter scheduler", href: "#" },
+      { label: "LinkedIn scheduler", href: "#" },
+      { label: "Tik Tok scheduler", href: "#" },
+      { label: "YouTube scheduler", href: "#" },
+      { label: "Pinterest scheduler", href: "#" },
+      { label: "Threads scheduler", href: "#" },
+      { label: "Bluesky scheduler", href: "#" },
     ],
-    Compare: ["Option Agencies", "SMV Consideration", "Reason Swittches"],
+    Compare: [
+      { label: "Option Agencies", href: "#" },
+      { label: "SMV Consideration", href: "#" },
+      { label: "Reason Swittches", href: "#" },
+    ],
   };
 
   return (
@@ -64,13 +75,13 @@ const Footer = () => {
               <h3 className="font-semibold text-foreground mb-4">{title}</h3>
               <ul className="space-y-1.5">
                 {links.map((link) => (
-                  <li key={link}>
-                    <a
-                      href="#"
+                  <li key={link.label}>
+                    <Link
+                      href={link.href}
                       className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                     >
-                      {link}
-                    </a>
+                      {link.label}
+                    </Link>
                   </li>
                 ))}
               </ul>
