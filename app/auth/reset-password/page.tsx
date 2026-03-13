@@ -18,8 +18,11 @@ import { Label } from "@/components/ui/label";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useResetPasswordMutation } from "@/queries/auth/useForgotPassword";
+import { Spinner } from "@/components/ui/spinner";
+import { toast } from "react-toastify";
 
-const resetPasswordSchema = z
+export const resetPasswordSchema = z
   .object({
     password: z
       .string()
@@ -44,7 +47,7 @@ const resetPasswordSchema = z
 const ResetPassword = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const token = searchParams.get("t");
+  const token = searchParams.get("token");
 
   const form = useForm<z.infer<typeof resetPasswordSchema>>({
     resolver: zodResolver(resetPasswordSchema),
@@ -54,17 +57,24 @@ const ResetPassword = () => {
     },
   });
 
+  const { mutate: resetPassword, isPending: resetPasswordIsPending } =
+    useResetPasswordMutation();
+
   const onSubmit = (values: z.infer<typeof resetPasswordSchema>) => {
     const payload = {
       token: token ?? "",
       password: values.password,
       confirmPassword: values.confirmPassword,
     };
-
-    console.log("Reset password payload:", payload);
-
-    // Example: redirect after successful reset
-    // router.push("/auth/login");
+    resetPassword(payload, {
+      onSuccess: (res) => {
+        toast.success(res.message);
+        router.push("/auth/password-reset-successfully");
+      },
+      onError: (error: any) => {
+        toast.error(error.response?.data?.message);
+      },
+    });
   };
 
   return (
@@ -127,8 +137,16 @@ const ResetPassword = () => {
             <Button
               className="flex w-full text-background font-semibold text-md rounded-md items-center text-md py-7 justify-center gap-1.5 bg-primary hover:bg-primary/80 cursor-pointer"
               type="submit"
+              disabled={resetPasswordIsPending}
             >
-              Update Password
+              {resetPasswordIsPending ? (
+                <>
+                  <Spinner />
+                  Resetting...
+                </>
+              ) : (
+                "Reset Password"
+              )}
             </Button>
 
             <div

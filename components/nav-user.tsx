@@ -29,10 +29,11 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { useLogout } from "@/queries/auth/useLogout";
-import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { logout } from "@/store/slices/authSlice";
+import { toast } from "react-toastify";
+import { useGetProfile } from "@/queries/user/updateUser";
 
 export function NavUser({
   user,
@@ -46,6 +47,7 @@ export function NavUser({
   const { isMobile } = useSidebar();
   const router = useRouter();
   const dispatch = useDispatch();
+  const { data: profileData } = useGetProfile();
 
   const { mutate: logoutUser, isPending: signUpUserIsPending } = useLogout({
     onSuccess: (res) => {
@@ -97,13 +99,13 @@ export function NavUser({
               size="lg"
               className="data-[state=open]:bg-sidebar-accent outline-none border-none focus:ring-0 data-[state=open]:text-sidebar-accent-foreground cursor-pointer"
             >
-              <Avatar className="h-8 w-8 rounded-full">
-                <AvatarImage src={user.avatar} alt={user.name} />
-                <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+              <Avatar className="h-10 w-10 rounded-full">
+                <AvatarImage src={profileData?.avatar} alt={profileData?.name} />
+                <AvatarFallback className="rounded-lg">{profileData?.name?.charAt(0)}</AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">{user.name}</span>
-                <span className="truncate text-xs">{user.email}</span>
+                <span className="truncate font-medium">{profileData?.name}</span>
+                <span className="truncate text-xs">{profileData?.email}</span>
               </div>
               <ChevronsUpDown className="ml-auto size-4" />
             </SidebarMenuButton>

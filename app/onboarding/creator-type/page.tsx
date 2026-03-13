@@ -434,7 +434,7 @@ const OnboardingModal = ({ onOpenChange }: OnboardingModalProps) => {
                         Watch a quick demo
                       </Button>
                       <Button
-                        onClick={() => router.push("/dashboard/content-studio")}
+                        onClick={() => router.push("/dashboard")}
                         className="h-11 sm:h-12 cursor-pointer text-sm sm:text-base font-semibold flex items-center gap-2"
                       >
                         Go to my Dashboard

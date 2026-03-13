@@ -12,7 +12,7 @@ export default function ConditionalLayout({
   const pathname = usePathname();
 
   // All dashboard routes
-  const isDashboard = ["/dashboard", "/settings", "/auth"].some((route) =>
+  const isDashboard = ["/dashboard", "/settings", "/auth", "/onboarding"].some((route) =>
     pathname.startsWith(route)
   );
 

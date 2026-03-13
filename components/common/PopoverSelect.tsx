@@ -74,7 +74,7 @@ export function PopoverSelect({
         </Button>
       </PopoverTrigger>
 
-      <PopoverContent className={cn("p-0", `w-[${width}]`)}>
+      <PopoverContent className={cn("p-0", `w-[${width}] !rounded-sm shadow-[0_4px_25px_rgba(0,0,0,0.02)]`)}>
         <Command>
           {isSearchable && (
             <CommandInput placeholder={`Search...`} className="h-9" />

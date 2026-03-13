@@ -42,7 +42,9 @@ export default function RootLayout({
             <ReactQueryProvider>
               <ConditionalLayout>{children}</ConditionalLayout>
             </ReactQueryProvider>
-            <ToastContainer />
+            <ToastContainer 
+            position="bottom-right"
+            />
             <Toaster
               position="top-right"
               toastOptions={{

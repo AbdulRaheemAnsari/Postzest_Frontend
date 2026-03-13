@@ -24,6 +24,7 @@ import {
   Account,
 } from "@/components/common/AccountMultiSelect";
 import { cn } from "@/lib/utils";
+import { FileUpload } from "@/components/common/FileUpload";
 
 interface VideoFile {
   id: string;

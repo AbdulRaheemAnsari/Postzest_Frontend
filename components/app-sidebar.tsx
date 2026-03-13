@@ -10,6 +10,7 @@ import {
   FileText,
   Layers,
   LayoutDashboard,
+  Lightbulb,
   Plus,
   Settings,
   Upload,
@@ -83,6 +84,11 @@ const data = {
       title: "Content Menu",
       items: [
         {
+          title: "Ideas",
+          url: "/dashboard/ideas",
+          icon: Lightbulb,
+        },
+         {
           title: "Calendar",
           url: "/dashboard/calendar",
           icon: CalendarDays,
@@ -140,7 +146,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     state === true || state === "collapsed" || state === "icon";
 
   return (
-    <Sidebar collapsible="icon" {...props}>
+    <Sidebar className="scroll-px-0.5 px-1" collapsible="icon" {...props}>
       <SidebarHeader className="border-b border-muted-foreground/10 mb-4 px-0">
         <TeamSwitcher teams={data.teams} />
       </SidebarHeader>

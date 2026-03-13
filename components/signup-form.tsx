@@ -29,10 +29,9 @@ import {
   useSignUpMutation,
 } from "@/queries/auth/useSignupMutation";
 import { Spinner } from "./ui/spinner";
-import { toast } from "sonner";
+import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { Lock, Mail, User } from "lucide-react";
 
 export function SignUpForm({
   className,
@@ -42,7 +41,7 @@ export function SignUpForm({
   const form = useForm<z.infer<typeof signUpRequestSchema>>({
     resolver: zodResolver(signUpRequestSchema),
     defaultValues: {
-      fullName: "",
+      name: "",
       email: "",
       password: "",
     },
@@ -50,15 +49,14 @@ export function SignUpForm({
 
   const { mutate: signUpUser, isPending: signUpUserIsPending } =
     useSignUpMutation({
-      onSuccess: (res) => {
-        console.log("res", res);
+      onSuccess: (res: any) => {
+        console.log("signup-res", res);
         toast.success(res?.message);
-        // localStorage.setItem("email", res?.email);
+        localStorage.setItem("email", res?.user?.email);
         router.push("/auth/otp");
       },
-      onError: (err) => {
-        toast.error(err?.message);
-        console.log("err", err);
+      onError: (err: any) => {
+        toast.error(err?.response?.data?.message);
       },
     });
 
@@ -123,7 +121,7 @@ export function SignUpForm({
 
                 <FormField
                   control={form.control}
-                  name="fullName"
+                  name="name"
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>

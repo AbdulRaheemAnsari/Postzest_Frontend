@@ -1,5 +1,4 @@
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
-import { z } from "zod";
 import { axiosApi } from "@/lib/axios";
 
 export const useLogout = (options?: UseMutationOptions<Error>) => {

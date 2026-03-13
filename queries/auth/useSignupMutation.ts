@@ -3,7 +3,7 @@ import { z } from "zod";
 import { axiosApi } from "@/lib/axios";
 
 export const signUpRequestSchema = z.object({
-  fullName: z
+  name: z
     .string()
     .min(4, { message: "Full name must be at least 4 characters long." })
     .max(50, { message: "Full name must be less than 50 characters." }),
@@ -22,7 +22,7 @@ export const useSignUpMutation = (
   return useMutation<Error, SignUpRequest>({
     mutationFn: async (payload) => {
       const validatedRequest = signUpRequestSchema.parse(payload);
-      const response = await axiosApi.post("/auth/register", validatedRequest);
+      const response = await axiosApi.post("/auth/signup", validatedRequest);
       return response.data;
     },
 

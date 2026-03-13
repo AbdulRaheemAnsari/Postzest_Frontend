@@ -1,4 +1,4 @@
-import { useMutation, UseMutationOptions } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { z } from "zod";
 import { axiosApi } from "@/lib/axios";
 
@@ -9,27 +9,12 @@ export const loginRequestSchema = z.object({
 
 export type LoginRequest = z.infer<typeof loginRequestSchema>;
 
-export const useLoginMutation = (
-  options?: UseMutationOptions<Error, LoginRequest>
-) => {
-  return useMutation<Error, LoginRequest>({
-    mutationFn: async (payload) => {
+export const useLoginMutation = () => {
+  return useMutation({
+    mutationFn: async (payload: LoginRequest) => {
       const validatedRequest = loginRequestSchema.parse(payload);
-
       const response = await axiosApi.post("/auth/login", validatedRequest);
-
-      return response;
+      return response.data;
     },
-
-    onSuccess: (response, ...rest) => {
-      options?.onSuccess?.(response, ...rest);
-    },
-
-    onError: (error, ...rest) => {
-      console.error("Login failed:", error);
-      options?.onError?.(error, ...rest);
-    },
-
-    ...options,
   });
 };

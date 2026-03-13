@@ -18,6 +18,9 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useForgotPasswordMutation } from "@/queries/auth/useForgotPassword";
+import { toast } from "react-toastify";
+import { Spinner } from "@/components/ui/spinner";
 
 const forgotPasswordSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email address." }),
@@ -33,8 +36,21 @@ const ForgotPassword = () => {
     },
   });
 
+  const { mutate: forgotPassword, isPending: forgotPasswordIsPending } = useForgotPasswordMutation();
+
   const onSubmit = (values: z.infer<typeof forgotPasswordSchema>) => {
-    console.log("Forgot password for:", values.email);
+    forgotPassword({ email: values.email }, {
+      onSuccess: (res) => {
+        toast.success(res.message);
+        sessionStorage.setItem("resetEmail", values.email);
+        router.push("/auth/email-sent-successfully");
+        console.log("Forgot password for:", values.email);
+      },
+      onError: (error: any) => {
+        toast.error(error.response?.data?.message);
+        console.error("Forgot password error:", error);
+      }
+    });
   };
 
   return (
@@ -77,10 +93,18 @@ const ForgotPassword = () => {
             />
 
             <Button
+              disabled={forgotPasswordIsPending}
               className="flex w-full text-background font-semibold text-md rounded-md items-center text-md py-7 justify-center gap-1.5 bg-primary hover:bg-primary/80 cursor-pointer"
               type="submit"
             >
-              Send reset link
+              {forgotPasswordIsPending ? (
+                <>
+                  <Spinner />
+                  Sending...
+                </>
+              ) : (
+                "Send reset link"
+              )}
             </Button>
 
             <div

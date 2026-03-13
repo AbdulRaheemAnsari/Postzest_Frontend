@@ -25,13 +25,13 @@ import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import FloatingInput from "@/components/common/FloatingInput";
 import { useRouter } from "next/navigation";
-import { useLoginMutation } from "@/queries/auth/useLoginMutation";
-import { toast } from "sonner";
+import { LoginRequest, useLoginMutation } from "@/queries/auth/useLoginMutation";
 import { Spinner } from "./ui/spinner";
 import { useDispatch } from "react-redux";
 import { setAuthData } from "@/store/slices/authSlice";
 import Image from "next/image";
 import { Lock, Mail } from "lucide-react";
+import { toast } from "react-toastify";
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email address." }),
@@ -55,24 +55,23 @@ export function LoginForm({
     },
   });
 
-  const { mutate: userLogin, isPending: userLoginIsPending } = useLoginMutation(
-    {
-      onSuccess: (res) => {
-        const accessToken = res?.data?.accessToken;
-        const user = res?.data?.user;
-        dispatch(setAuthData({ accessToken, user }));
-        toast.success(`${res?.data?.user.fullName} Successfully loggedin`);
-        router.push("/dashboard/ai-studio");
-      },
-      onError: (err) => {
-        console.log("err", err);
-      },
-    }
-  );
+ const { mutate: userLogin, isPending: userLoginIsPending } = useLoginMutation();
 
-  const onSubmit = (values: z.infer<typeof loginSchema>) => {
-    userLogin(values);
-  };
+const onSubmit = (payload: LoginRequest) => {
+  userLogin(payload, {
+    onSuccess: (res) => {
+      const token = res.data?.accessToken;
+      const user = res.data?.user;
+      localStorage.setItem("token", token);
+      dispatch(setAuthData({ token, user }));
+      toast.success(`${user.name} Successfully logged in`);
+      router.push("/dashboard/ai-studio");
+    },
+    onError: (err: any) => {
+      toast.error(err.response?.data?.message);
+    },
+  });
+};
 
   return (
     <Form {...form}>
@@ -108,11 +107,7 @@ export function LoginForm({
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
-                        <FloatingInput
-                          label="Email"
-                          id="email"
-                          {...field}
-                        />
+                        <FloatingInput label="Email" id="email" {...field} />
                       </FormControl>
                       <FormMessage className="text-xs" />
                     </FormItem>

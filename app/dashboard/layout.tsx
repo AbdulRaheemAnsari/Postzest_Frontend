@@ -24,13 +24,17 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <SidebarProvider>
-      <AppSidebar />
+    <SidebarProvider
+    
+    >
+      <AppSidebar
+      variant="inset"
+      />
 
       {/* Main content area */}
-      <SidebarInset>
+      <SidebarInset className="w-(--content-width) overflow-x-hidden ">
         {/* Optional topbar trigger */}
-        <header className="flex items-center justify-between  border-b backdrop-saturate-150 backdrop-blur-lg bg-white/50 w-full h-16 sticky top-0 z-50 shrink-0 gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
+        <header className="flex justify-between backdrop-saturate-150 backdrop-blur-lg bg-white/50 w-full py-3 sticky  h-(--header-height) shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height)">
           <div className="flex items-center gap-2 px-4">
             <SidebarTrigger className="-ml-1" />
             <Separator
@@ -60,7 +64,7 @@ export default function DashboardLayout({
         </header>
 
         {/* Page content */}
-        <main className="pt-4 pb-4 md:px-6 px-3">{children}</main>
+        <main className="pt-4 pb-4 md:px-6 px-3 overflow-x-hidden">{children}</main>
       </SidebarInset>
     </SidebarProvider>
   );

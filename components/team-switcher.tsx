@@ -38,11 +38,11 @@ export function TeamSwitcher({
   }
 
   return (
-    <SidebarMenu className="">
-      <SidebarMenuItem>
+    <SidebarMenu className="!px-0">
+      <SidebarMenuItem className="">
         <DropdownMenu>
-          <SidebarMenuButton size="lg" className="cursor-pointer overflow-hidden">
-            <Image src={postzestLogo} alt="" className="w-40 max-w-40" />
+          <SidebarMenuButton size="sm" className="cursor-pointer">
+            <Image src={postzestLogo} alt="" className="w-40 max-w-50 !px-0" />
           </SidebarMenuButton>
         </DropdownMenu>
       </SidebarMenuItem>

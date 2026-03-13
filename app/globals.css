@@ -5,6 +5,7 @@ body{
   font-weight: 500;
 }
 
+
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -161,3 +162,14 @@ body{
 }
 
 
+.Toastify__toast {
+  @apply font-semibold rounded-lg text-sm overflow-hidden text-black bg-white py-4 shadow-lg;
+}
+
+.Toastify__toast-body {
+  @apply text-sm;
+}
+
+.Toastify__progress-bar {
+  @apply bg-primary;
+}
