@@ -11,15 +11,21 @@ interface AuthState {
   user: User | null;
 }
 
+const getStoredToken = (): string | null => {
+  if (typeof window === "undefined") return null;
+  try {
+    return localStorage.getItem("token");
+  } catch {
+    return null;
+  }
+};
+
 const getStoredUser = () => {
   if (typeof window === "undefined") return null;
 
-  const stored = localStorage.getItem("user");
-
-  if (!stored) return null; // null or empty → return null
-  if (stored === "undefined") return null; // prevent crash
-
   try {
+    const stored = localStorage.getItem("user");
+    if (!stored || stored === "undefined") return null;
     return JSON.parse(stored);
   } catch (err) {
     console.error("Failed to parse user JSON:", err);
@@ -28,9 +34,7 @@ const getStoredUser = () => {
 };
 
 const initialState: AuthState = {
-  token:
-    typeof window !== "undefined" ? localStorage.getItem("token") : null,
-
+  token: getStoredToken(),
   user: getStoredUser(),
 };
 

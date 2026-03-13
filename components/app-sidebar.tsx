@@ -68,7 +68,7 @@ const data = {
           url: "/dashboard/bulk-tools",
           icon: Layers,
         },
-         {
+        {
           title: "Dashboard",
           url: "/dashboard",
           icon: LayoutDashboard,
@@ -88,7 +88,7 @@ const data = {
           url: "/dashboard/ideas",
           icon: Lightbulb,
         },
-         {
+        {
           title: "Calendar",
           url: "/dashboard/calendar",
           icon: CalendarDays,
@@ -140,9 +140,10 @@ const data = {
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { state } = useSidebar();
   const dispatch = useDispatch();
-  const [isOpen, setIsOpen] = React.useState("");
+  const [isOpen, setIsOpen] = React.useState<string | boolean>(false);
 
   const isCollapsed =
+    // @ts-ignore
     state === true || state === "collapsed" || state === "icon";
 
   return (
@@ -153,14 +154,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
       <div className="px-2 ">
         <WorkspaceSwitcher
+          // @ts-ignore
           setIsOpen={setIsOpen}
           isCollapsed={isCollapsed}
           workspaces={[]}
           currentWorkspaceId={""}
-          onSelectWorkspace={() => {}}
-          onEditWorkspace={() => {}}
-          onCreateWorkspace={() => {}}
-          onDeleteWorkspace={() => {}}
+          onSelectWorkspace={() => { }}
+          onEditWorkspace={() => { }}
+          onCreateWorkspace={() => { }}
+          onDeleteWorkspace={() => { }}
         />
         <Separator className="bg-muted-foreground/10 my-2" />
 
@@ -187,6 +189,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarFooter>
 
       <SidebarRail />
+      {/* @ts-ignore */}
       <CreateWorkspaceModal isOpen={isOpen} setIsOpen={setIsOpen} />
     </Sidebar>
   );

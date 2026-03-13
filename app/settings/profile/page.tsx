@@ -93,7 +93,7 @@ export default function Profile() {
       email: data.email,
       phone: data.phone,
     };
-    updateProfile(Payload, {
+    updateProfile(Payload as any, {
       onSuccess: (res: any) => {
         toast.success(res.message);
       },
@@ -106,7 +106,7 @@ export default function Profile() {
   const handleAvatarUpload = (file: File) => {
     const formData = new FormData();
     formData.append("avatar", file);
-    updateAvatar(formData, {
+    updateAvatar(formData as any, {
       onSuccess: (res: any) => {
         toast.success(res.message);
       },
@@ -118,7 +118,7 @@ export default function Profile() {
 
   const onSubmitPassword = (data: PasswordForm) => {
     console.log("Password data:", data);
-    updatePassword(data, {
+    updatePassword(data as any, {
       onSuccess: (res: any) => {
         toast.success(res.message);
         passwordForm.reset();

@@ -61,9 +61,9 @@ const page = () => {
       onError: (err: any) => {
         console.log("eddrr", err);
         toast.error("Invalid OTP");
-        }
-      });
-    };
+      }
+    });
+  };
 
   const { mutate: resendOtp, isPending: resendOtpIsPending } = useResendOtp({
     onSuccess: (res: any) => {
@@ -76,6 +76,7 @@ const page = () => {
   });
 
   const handleResendOtp = () => {
+    // @ts-ignore
     resendOtp({ email });
   };
 
@@ -88,112 +89,111 @@ const page = () => {
         priority
       />
 
-    <div className="relative z-10">
-      <Form {...form}>
-        <form
-          onSubmit={handleSubmit(onSubmit, (formErrors) => {
-            console.log("Form errors:", formErrors);
-          })}
-          className="w-full h-screen flex items-start justify-center"
-        >
-          <div>
-            <div className="max-w-md flex flex-col items-center justify-center px-6 py-4 mt-32 rounded-lg space-y-2">
-              <Image
-                src={otpImage}
-                alt="OTP Verification"
-                className="w-20 h-20"
-              />
-              <Label className="text-foreground text-3xl font-semibold">
-                Confirm your email
-              </Label>
+      <div className="relative z-10">
+        <Form {...form}>
+          <form
+            onSubmit={handleSubmit(onSubmit, (formErrors) => {
+              console.log("Form errors:", formErrors);
+            })}
+            className="w-full h-screen flex items-start justify-center"
+          >
+            <div>
+              <div className="max-w-md flex flex-col items-center justify-center px-6 py-4 mt-32 rounded-lg space-y-2">
+                <Image
+                  src={otpImage}
+                  alt="OTP Verification"
+                  className="w-20 h-20"
+                />
+                <Label className="text-foreground text-3xl font-semibold">
+                  Confirm your email
+                </Label>
 
-              <span className="text-center text-foreground font-semibold text-sm leading-4 px-4">
-                We have sent a 6-digit verification code to{" "}
-                <span className="font-bold text-primary">
-                  {email || "your email"}
-                </span>
-              </span>
-
-              <FieldGroup className="gap-4 pt-4">
-                <Field>
-                  <FieldLabel htmlFor="otp" className="sr-only">
-                    Verification code
-                  </FieldLabel>
-
-                  <Controller
-                    name="otp"
-                    control={control}
-                    rules={{
-                      required: "OTP is required",
-                      minLength: { value: 4, message: "OTP must be 4 digits" },
-                      maxLength: { value: 4, message: "OTP must be 4 digits" },
-                    }}
-                    render={({ field }) => (
-                      <InputOTP
-                        {...field}
-                        maxLength={6}
-                        containerClassName="gap-4"
-                        value={field.value || ""}
-                        onChange={field.onChange}
-                      >
-                        <InputOTPGroup className="md:gap-3 gap-2 mx-auto">
-                          <InputOTPSlot
-                            index={0}
-                            className="w-20 h-20 text-5xl font-semibold text-primary border-2 border-primary rounded-xl"
-                          />
-                          <InputOTPSlot
-                            index={1}
-                            className="w-20 h-20 text-5xl font-semibold text-primary border-2 border-primary rounded-xl"
-                          />
-                          <InputOTPSlot
-                            index={2}
-                            className="w-20 h-20 text-5xl font-semibold text-primary border-2 border-primary rounded-xl"
-                          />
-                          <InputOTPSlot
-                            index={3}
-                            className="w-20 h-20 text-5xl font-semibold text-primary border-2 border-primary rounded-xl"
-                          />
-                        </InputOTPGroup>
-                      </InputOTP>
-                    )}
-                  />
-                </Field>
-
-                <Button
-                  disabled={verifyOtpIsPending}
-                  className="flex w-full text-background font-semibold text-md rounded-md items-center text-md py-7 justify-center gap-1.5 bg-primary hover:bg-primary/80 cursor-pointer"
-                  type="submit"
-                >
-                  {verifyOtpIsPending ? <Spinner /> : "Verify email"}
-                </Button>
-
-                <FieldDescription className="text-center text-base text-muted-foreground/60 flex items-center justify-center gap-2">
-                  Didn&apos;t receive the code?{" "}
-                  <span
-                    onClick={handleResendOtp}
-                    className={`flex items-center gap-1 ${
-                      resendOtpIsPending && "text-primary/30"
-                    } text-primary hover:text-primary/70 font-semibold cursor-pointer`}
-                  >
-                    {resendOtpIsPending ? "Resending..." : "Resend"}
+                <span className="text-center text-foreground font-semibold text-sm leading-4 px-4">
+                  We have sent a 6-digit verification code to{" "}
+                  <span className="font-bold text-primary">
+                    {email || "your email"}
                   </span>
-                </FieldDescription>
-              </FieldGroup>
-             
-                <span 
-                 onClick={() => router.push("/auth/signup")}
-                className="text-base cursor-pointer text-primary hover:text-primary/70 mt-2 font-bold">
+                </span>
+
+                <FieldGroup className="gap-4 pt-4">
+                  <Field>
+                    <FieldLabel htmlFor="otp" className="sr-only">
+                      Verification code
+                    </FieldLabel>
+
+                    <Controller
+                      name="otp"
+                      control={control}
+                      rules={{
+                        required: "OTP is required",
+                        minLength: { value: 4, message: "OTP must be 4 digits" },
+                        maxLength: { value: 4, message: "OTP must be 4 digits" },
+                      }}
+                      render={({ field }) => (
+                        <InputOTP
+                          {...field}
+                          maxLength={6}
+                          containerClassName="gap-4"
+                          value={field.value || ""}
+                          onChange={field.onChange}
+                        >
+                          <InputOTPGroup className="md:gap-3 gap-2 mx-auto">
+                            <InputOTPSlot
+                              index={0}
+                              className="w-20 h-20 text-5xl font-semibold text-primary border-2 border-primary rounded-xl"
+                            />
+                            <InputOTPSlot
+                              index={1}
+                              className="w-20 h-20 text-5xl font-semibold text-primary border-2 border-primary rounded-xl"
+                            />
+                            <InputOTPSlot
+                              index={2}
+                              className="w-20 h-20 text-5xl font-semibold text-primary border-2 border-primary rounded-xl"
+                            />
+                            <InputOTPSlot
+                              index={3}
+                              className="w-20 h-20 text-5xl font-semibold text-primary border-2 border-primary rounded-xl"
+                            />
+                          </InputOTPGroup>
+                        </InputOTP>
+                      )}
+                    />
+                  </Field>
+
+                  <Button
+                    disabled={verifyOtpIsPending}
+                    className="flex w-full text-background font-semibold text-md rounded-md items-center text-md py-7 justify-center gap-1.5 bg-primary hover:bg-primary/80 cursor-pointer"
+                    type="submit"
+                  >
+                    {verifyOtpIsPending ? <Spinner /> : "Verify email"}
+                  </Button>
+
+                  <FieldDescription className="text-center text-base text-muted-foreground/60 flex items-center justify-center gap-2">
+                    Didn&apos;t receive the code?{" "}
+                    <span
+                      onClick={handleResendOtp}
+                      className={`flex items-center gap-1 ${resendOtpIsPending && "text-primary/30"
+                        } text-primary hover:text-primary/70 font-semibold cursor-pointer`}
+                    >
+                      {resendOtpIsPending ? "Resending..." : "Resend"}
+                    </span>
+                  </FieldDescription>
+                </FieldGroup>
+
+                <span
+                  onClick={() => router.push("/auth/signup")}
+                  className="text-base cursor-pointer text-primary hover:text-primary/70 mt-2 font-bold">
                   Use a different email
                 </span>
+              </div>
+              <Image
+                className="w-50 mx-auto cursor-pointer mt-2"
+                src={postzestLogo}
+                alt="postzest-logo"
+              />
             </div>
-            <Image
-              className="w-50 mx-auto cursor-pointer mt-2"
-              src={postzestLogo}
-              alt="postzest-logo"
-            />
-          </div>
-        </form>
-      </Form>
+          </form>
+        </Form>
       </div>
     </>
   );

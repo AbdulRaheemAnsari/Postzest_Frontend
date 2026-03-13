@@ -22,7 +22,7 @@ export default function ProtectedRoute({
     }
   }, [token, router]);
 
-  if (!token) return <GlobalRouteLoader />;
+  if (!token) return <GlobalRouteLoader children={children} />;
 
   return <>{children}</>;
 }

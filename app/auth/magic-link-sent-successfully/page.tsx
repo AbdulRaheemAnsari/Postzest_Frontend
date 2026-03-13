@@ -4,7 +4,10 @@ import magic from "../../../assets/images/magic.png";
 import Image from "next/image";
 
 const MagicLinkSentSuccessfully = () => {
-  const email = localStorage.getItem("email");
+  let email: string | null = null;
+  if (typeof window !== "undefined") {
+    email = localStorage.getItem("email");
+  }
   return (
     <div className="w-full h-screen bg-bg-color-secoundry flex items-start justify-center">
       <div className="max-w-md bg-background flex flex-col items-center justify-center px-6 py-6 mt-32 rounded-lg space-y-2">

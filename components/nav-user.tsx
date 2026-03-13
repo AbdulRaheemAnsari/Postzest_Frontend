@@ -50,13 +50,13 @@ export function NavUser({
   const { data: profileData } = useGetProfile();
 
   const { mutate: logoutUser, isPending: signUpUserIsPending } = useLogout({
-    onSuccess: (res) => {
+    onSuccess: (res: any) => {
       console.log("res", res);
       toast.success(res?.data?.message);
       dispatch(logout());
       router.push("/auth/login");
     },
-    onError: (err) => {
+    onError: (err: any) => {
       toast.error(err?.message);
       console.log("err", err);
     },

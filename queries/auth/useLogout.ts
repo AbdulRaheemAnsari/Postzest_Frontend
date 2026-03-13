@@ -5,7 +5,7 @@ export const useLogout = (options?: UseMutationOptions<Error>) => {
   return useMutation<Error>({
     mutationFn: async () => {
       const response = await axiosApi.post("/auth/logout", {});
-      return response;
+      return response.data;
     },
     onSuccess: (response, ...rest) => {
       options?.onSuccess?.(response, ...rest);

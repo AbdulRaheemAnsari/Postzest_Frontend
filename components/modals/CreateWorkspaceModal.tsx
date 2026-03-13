@@ -123,10 +123,9 @@ export function CreateWorkspaceModal({
                 className={`
                   relative cursor-pointer rounded-full border-2 border-dashed 
                   transition-all duration-200 md:w-26 md:h-20 w-22 h-22 flex items-center justify-center
-                  ${
-                    isDragging
-                      ? "border-primary bg-primary/5 scale-105"
-                      : "border-border hover:border-primary/50 hover:bg-secondary/50"
+                  ${isDragging
+                    ? "border-primary bg-primary/5 scale-105"
+                    : "border-border hover:border-primary/50 hover:bg-secondary/50"
                   }
                 `}
               >

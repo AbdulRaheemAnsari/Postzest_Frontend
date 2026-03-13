@@ -87,7 +87,7 @@ export const mockPosts: Post[] = [
   },
   {
     id: "4",
-    image: null,
+    image: "",
     title: "First posts made via youtube and Tik Tok with post bridge...",
     date: "April 26, 2025",
     time: "6:00 PM",
@@ -325,93 +325,93 @@ export const mockScheduledPosts = [
 
 
 
- export const accounts = [
-    {
-      id: 1,
-      username: "@abdulraheem7284",
-      profileImage:
-        "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&h=100&fit=crop",
-      hasToggle: true,
-      hasRemoveButton: false,
-    },
-    {
-      id: 2,
-      username: "@abdulraheem7284",
-      profileImage:
-        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop",
-      hasToggle: false,
-      hasRemoveButton: true,
-    },
-    {
-      id: 3,
-      username: "@abdulraheem7284",
-      profileImage:
-        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop",
-      hasToggle: true,
-      hasRemoveButton: false,
-    },
-    {
-      id: 4,
-      username: "@abdulraheem7284",
-      profileImage:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop",
-      hasToggle: false,
-      hasRemoveButton: true,
-    },
-    {
-      id: 5,
-      username: "@abdulraheem7284",
-      profileImage:
-        "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop",
-      hasToggle: false,
-      hasRemoveButton: true,
-    },
-    {
-      id: 6,
-      username: "@abdulraheem7284",
-      profileImage:
-        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
-      hasToggle: true,
-      hasRemoveButton: false,
-    },
-    {
-      id: 7,
-      username: "@abdulraheem7284",
-      profileImage:
-        "https://images.unsplash.com/photo-1489424731084-a5d8b219a5bb?w=100&h=100&fit=crop",
-      hasToggle: true,
-      hasRemoveButton: false,
-    },
-    {
-      id: 8,
-      username: "@abdulraheem7284",
-      profileImage:
-        "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&h=100&fit=crop",
-      hasToggle: false,
-      hasRemoveButton: true,
-    },
-    {
-      id: 9,
-      username: "@abdulraheem7284",
-      profileImage:
-        "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop",
-      hasToggle: false,
-      hasRemoveButton: true,
-    },
-    {
-      id: 10,
-      username: "@abdulraheem7284",
-      profileImage:
-        "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=100&h=100&fit=crop",
-      hasToggle: true,
-      hasRemoveButton: false,
-    },
-    {
-      id: 11,
-      username: "@abdulraheem7284",
-      profileImage:
-        "https://images.unsplash.com/photo-1506863530036-1efeddceb993?w=100&h=100&fit=crop",
-      hasToggle: true,
-      hasRemoveButton: false,
-    },
-  ];
+export const accounts = [
+  {
+    id: 1,
+    username: "@abdulraheem7284",
+    profileImage:
+      "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&h=100&fit=crop",
+    hasToggle: true,
+    hasRemoveButton: false,
+  },
+  {
+    id: 2,
+    username: "@abdulraheem7284",
+    profileImage:
+      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop",
+    hasToggle: false,
+    hasRemoveButton: true,
+  },
+  {
+    id: 3,
+    username: "@abdulraheem7284",
+    profileImage:
+      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop",
+    hasToggle: true,
+    hasRemoveButton: false,
+  },
+  {
+    id: 4,
+    username: "@abdulraheem7284",
+    profileImage:
+      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop",
+    hasToggle: false,
+    hasRemoveButton: true,
+  },
+  {
+    id: 5,
+    username: "@abdulraheem7284",
+    profileImage:
+      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop",
+    hasToggle: false,
+    hasRemoveButton: true,
+  },
+  {
+    id: 6,
+    username: "@abdulraheem7284",
+    profileImage:
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
+    hasToggle: true,
+    hasRemoveButton: false,
+  },
+  {
+    id: 7,
+    username: "@abdulraheem7284",
+    profileImage:
+      "https://images.unsplash.com/photo-1489424731084-a5d8b219a5bb?w=100&h=100&fit=crop",
+    hasToggle: true,
+    hasRemoveButton: false,
+  },
+  {
+    id: 8,
+    username: "@abdulraheem7284",
+    profileImage:
+      "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&h=100&fit=crop",
+    hasToggle: false,
+    hasRemoveButton: true,
+  },
+  {
+    id: 9,
+    username: "@abdulraheem7284",
+    profileImage:
+      "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop",
+    hasToggle: false,
+    hasRemoveButton: true,
+  },
+  {
+    id: 10,
+    username: "@abdulraheem7284",
+    profileImage:
+      "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=100&h=100&fit=crop",
+    hasToggle: true,
+    hasRemoveButton: false,
+  },
+  {
+    id: 11,
+    username: "@abdulraheem7284",
+    profileImage:
+      "https://images.unsplash.com/photo-1506863530036-1efeddceb993?w=100&h=100&fit=crop",
+    hasToggle: true,
+    hasRemoveButton: false,
+  },
+];

@@ -19,12 +19,13 @@ import threads from "@/assets/images/threads.png";
 import tiktok from "@/assets/images/tiktok.png";
 import { Plus } from "lucide-react";
 import Image from "next/image";
+import { StaticImageData } from "next/image";
 
 interface SocialAccount {
   id: string;
   name: string;
   subtitle: string;
-  icon: React.ReactNode;
+  icon: StaticImageData;
   color: string;
   connected: boolean;
 }
@@ -101,7 +102,7 @@ const socialAccounts: SocialAccount[] = [
   },
 ];
 
-export const SocialConnectModal = ({}: SocialConnectModalProps) => {
+export const SocialConnectModal = ({ }: SocialConnectModalProps) => {
   const dispatch = useDispatch();
   const isSocialConnectModalOpen = useSelector(
     (state: RootState) => state.socialConnectModal.socialConnectModalOpen

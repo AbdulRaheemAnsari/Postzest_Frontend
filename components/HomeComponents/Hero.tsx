@@ -33,6 +33,7 @@ const Hero = () => {
   ];
 
   const calculateTransform = (baseX: number, baseY: number) => {
+    if (typeof window === "undefined") return "";
     const moveX = (mousePosition.x - window.innerWidth / 2) / 50;
     const moveY = (mousePosition.y - window.innerHeight / 2) / 50;
     return `translate(${moveX}px, ${moveY}px)`;

@@ -34,14 +34,16 @@ const MagicLink = () => {
     },
   });
 
-  const {mutate: magicLinkSend, isPending: MagicLinkIsPending} = useMagicLinkMutation();
+  const { mutate: magicLinkSend, isPending: MagicLinkIsPending } = useMagicLinkMutation();
 
   const onSubmit = (values: z.infer<typeof magicLinkRequestSchema>) => {
     magicLinkSend({ email: values.email }, {
       onSuccess: (res) => {
         toast.success(res?.message);
         console.log("magicLinkRes", res);
-        localStorage.setItem("email", res?.data?.email);
+        if (typeof window !== "undefined") {
+          localStorage.setItem("email", res?.data?.email);
+        }
         router.push("/auth/magic-link-sent-successfully");
       }, onError: (err: any) => {
         toast.error(err?.response?.data?.message);
@@ -81,7 +83,7 @@ const MagicLink = () => {
             />
 
             <Button
-            disabled={MagicLinkIsPending}
+              disabled={MagicLinkIsPending}
               className="flex w-full text-background font-semibold text-md rounded-md items-center text-md py-7 justify-center gap-1.5 bg-primary hover:bg-primary/80 cursor-pointer"
               type="submit"
             >

@@ -42,7 +42,9 @@ const ForgotPassword = () => {
     forgotPassword({ email: values.email }, {
       onSuccess: (res) => {
         toast.success(res.message);
-        sessionStorage.setItem("resetEmail", values.email);
+        if (typeof window !== "undefined") {
+          sessionStorage.setItem("resetEmail", values.email);
+        }
         router.push("/auth/email-sent-successfully");
         console.log("Forgot password for:", values.email);
       },

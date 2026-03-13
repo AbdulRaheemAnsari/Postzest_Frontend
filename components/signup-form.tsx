@@ -52,7 +52,9 @@ export function SignUpForm({
       onSuccess: (res: any) => {
         console.log("signup-res", res);
         toast.success(res?.message);
-        localStorage.setItem("email", res?.user?.email);
+        if (typeof window !== "undefined") {
+          localStorage.setItem("email", res?.user?.email);
+        }
         router.push("/auth/otp");
       },
       onError: (err: any) => {
@@ -61,7 +63,7 @@ export function SignUpForm({
     });
 
   const onSubmit = (values: z.infer<typeof signUpRequestSchema>) => {
-    signUpUser(values);
+    signUpUser(values as any);
   };
 
   return (
@@ -142,7 +144,7 @@ export function SignUpForm({
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
-                          <FloatingInput
+                        <FloatingInput
                           label="Email"
                           id="email"
                           {...field}

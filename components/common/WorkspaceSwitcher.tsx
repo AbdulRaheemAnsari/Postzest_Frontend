@@ -46,11 +46,10 @@ export function WorkspaceSwitcher({
         <Button
           variant="outline"
           size="sm"
-          className={`w-full ${
-            isCollapsed
+          className={`w-full ${isCollapsed
               ? " rounded-xs justify-center py-3"
               : "justify-between py-6"
-          } items-center cursor-pointer`}
+            } items-center cursor-pointer`}
           aria-label="Select Workspace"
         >
           <span className="flex items-center gap-2">
@@ -104,6 +103,7 @@ export function WorkspaceSwitcher({
 
         <DropdownMenuItem
           onSelect={onCreateWorkspace}
+          // @ts-ignore
           onClick={() => setIsOpen(true)}
           className="flex items-center gap-2 cursor-pointer"
         >

@@ -18,6 +18,7 @@ import { Label } from "@/components/ui/label";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 import { useResetPasswordMutation } from "@/queries/auth/useForgotPassword";
 import { Spinner } from "@/components/ui/spinner";
 import { toast } from "react-toastify";
@@ -44,7 +45,7 @@ export const resetPasswordSchema = z
     path: ["confirmPassword"], // highlight confirmPassword field
   });
 
-const ResetPassword = () => {
+const ResetPasswordForm = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
@@ -169,5 +170,11 @@ const ResetPassword = () => {
     </Form>
   );
 };
+
+const ResetPassword = () => (
+  <Suspense>
+    <ResetPasswordForm />
+  </Suspense>
+);
 
 export default ResetPassword;

@@ -20,7 +20,7 @@ export const useResendOtp = (
         validatedRequest
       );
 
-      return response;
+      return response.data;
     },
     onSuccess: (response, ...rest) => {
       options?.onSuccess?.(response, ...rest);

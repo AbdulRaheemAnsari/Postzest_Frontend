@@ -110,9 +110,10 @@ export function SettingsSidebar({
 }: React.ComponentProps<typeof Sidebar>) {
   const { state } = useSidebar();
   const router = useRouter();
-  const [isOpen, setIsOpen] = React.useState("");
+  const [isOpen, setIsOpen] = React.useState();
 
   const isCollapsed =
+    // @ts-ignore
     state === true || state === "collapsed" || state === "icon";
 
   return (
@@ -137,6 +138,7 @@ export function SettingsSidebar({
       </SidebarContent>
 
       <SidebarRail />
+      {/* @ts-ignore */}
       <CreateWorkspaceModal isOpen={isOpen} setIsOpen={setIsOpen} />
     </Sidebar>
   );
