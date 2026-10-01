@@ -53,11 +53,6 @@ const data = {
           icon: LayoutDashboard,
         },
         {
-          title: "New Post",
-          url: "/new-post",
-          icon: FilePlus,
-        },
-        {
           title: "Analytics",
           url: "/analytics",
           icon: FileChartColumnIncreasing,

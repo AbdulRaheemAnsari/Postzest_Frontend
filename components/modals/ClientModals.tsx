@@ -5,7 +5,7 @@ import { SocialConnectModal } from "./SocialConnectModal";
 export default function ClientModals() {
   return (
     <div>
-      <CreatePostModal open={false} onOpenChange={() => { }} />
+      <CreatePostModal />
       <SocialConnectModal open={false} onOpenChange={() => { }} />
     </div>
   );

@@ -19,7 +19,6 @@ import { Bell } from "lucide-react";
 
 const routeTitleMap: Record<string, string> = {
   "/home": "Overview",
-  "/new-post": "New Post",
   "/analytics": "Analytics",
   "/ideas": "Ideas Board",
   "/calendar": "Calendar",

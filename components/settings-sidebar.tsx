@@ -37,7 +37,6 @@ import {
 } from "@/components/ui/sidebar";
 import { Button } from "./ui/button";
 import { Separator } from "./ui/separator";
-import { WorkspaceSwitcher } from "./common/WorkspaceSwitcher";
 import { CreateWorkspaceModal } from "./modals/CreateWorkspaceModal";
 import { useDispatch } from "react-redux";
 import { openCreatePostModal } from "@/store/slices/createPostModalSlice";

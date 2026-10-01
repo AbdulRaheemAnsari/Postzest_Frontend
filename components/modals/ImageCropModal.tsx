@@ -1,52 +1,43 @@
-import { useState, useCallback } from "react";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+"use client";
+
+import React, { useState, useCallback } from "react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { X, Crop as CropIcon } from "lucide-react";
-import Cropper from "react-easy-crop";
-import { Area } from "react-easy-crop";
+import { Slider } from "@/components/ui/slider";
+import { Crop as CropIcon, ZoomIn, RotateCw } from "lucide-react";
+import Cropper, { Area } from "react-easy-crop";
+import { cn } from "@/lib/utils";
 
 interface ImageCropModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   imageSrc: string;
   onCropComplete: (croppedImage: string) => void;
+  initialAspect?: number;
 }
-
-const gradientFilters = [
-  { id: 1, gradient: "linear-gradient(135deg, #ffd89b 0%, #19547b 100%)" },
-  { id: 2, gradient: "linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)" },
-  { id: 3, gradient: "linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%)" },
-  { id: 4, gradient: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)" },
-  { id: 5, gradient: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)" },
-  { id: 6, gradient: "linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)" },
-  { id: 7, gradient: "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)" },
-  { id: 8, gradient: "linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)" },
-  { id: 9, gradient: "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)" },
-  { id: 10, gradient: "linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%)" },
-];
 
 export const ImageCropModal = ({
   open,
   onOpenChange,
   imageSrc,
   onCropComplete,
+  initialAspect = 4 / 5,
 }: ImageCropModalProps) => {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
+  const [rotation, setRotation] = useState(0);
+  const [aspect, setAspect] = useState<number>(initialAspect);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
-  const [selectedFilter, setSelectedFilter] = useState(1);
-  const [dontShowAgain, setDontShowAgain] = useState(false);
 
   const onCropCompleteInternal = useCallback(
-    (croppedArea: Area, croppedAreaPixels: Area) => {
+    (_croppedArea: Area, croppedAreaPixels: Area) => {
       setCroppedAreaPixels(croppedAreaPixels);
     },
     []
   );
 
   const createCroppedImage = async () => {
-    if (!croppedAreaPixels) return imageSrc;
+    if (!croppedAreaPixels || !imageSrc) return imageSrc;
 
     const image = new Image();
     image.src = imageSrc;
@@ -64,6 +55,11 @@ export const ImageCropModal = ({
         canvas.width = croppedAreaPixels.width;
         canvas.height = croppedAreaPixels.height;
 
+        ctx.save();
+        ctx.translate(canvas.width / 2, canvas.height / 2);
+        ctx.rotate((rotation * Math.PI) / 180);
+        ctx.translate(-canvas.width / 2, -canvas.height / 2);
+
         ctx.drawImage(
           image,
           croppedAreaPixels.x,
@@ -75,6 +71,7 @@ export const ImageCropModal = ({
           croppedAreaPixels.width,
           croppedAreaPixels.height
         );
+        ctx.restore();
 
         canvas.toBlob((blob) => {
           if (blob) {
@@ -84,6 +81,7 @@ export const ImageCropModal = ({
           }
         }, "image/jpeg");
       };
+      image.onerror = () => resolve(imageSrc);
     });
   };
 
@@ -95,103 +93,98 @@ export const ImageCropModal = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="!max-w-[640px] h-[74vh] overflow-y-scroll p-0 gap-0">
-        <div className="p-6">
+      <DialogContent className="max-w-[640px] p-0 gap-0 overflow-hidden bg-background">
+        <div className="p-5 space-y-4">
           {/* Header */}
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
-                <CropIcon className="h-5 w-5 text-foreground" />
+          <div className="flex items-center justify-between border-b border-border/60 pb-3">
+            <div className="flex items-center gap-2.5">
+              <div className="w-9 h-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
+                <CropIcon className="h-5 w-5" />
               </div>
               <div>
-                <h2 className="text-lg font-semibold text-foreground">
-                  Crop header image
-                </h2>
-                <p className="text-sm text-muted-foreground">
-                  Upload a 1600 × 480px image for best results.
-                </p>
+                <h3 className="text-base font-semibold text-foreground">Crop & Edit Image</h3>
+                <p className="text-xs text-muted-foreground">Adjust framing and aspect ratio before publishing</p>
               </div>
             </div>
           </div>
 
-          {/* Crop Area */}
-          <div className="relative h-[320px] bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHJlY3Qgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBmaWxsPSIjZGRkIi8+PHJlY3QgeD0iMTAiIHk9IjEwIiB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIGZpbGw9IiNkZGQiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] rounded-lg overflow-hidden mb-4">
+          {/* Aspect Ratio Presets */}
+          <div className="flex items-center justify-between gap-2 bg-muted/40 p-1.5 rounded-xl border border-border/50 text-xs">
+            <span className="font-semibold text-muted-foreground px-2">Presets:</span>
+            <div className="flex items-center gap-1">
+              {[
+                { label: "4:5 Portrait", ratio: 4 / 5 },
+                { label: "1:1 Square", ratio: 1 / 1 },
+                { label: "16:9 Wide", ratio: 16 / 9 },
+              ].map((item) => (
+                <button
+                  key={item.label}
+                  type="button"
+                  onClick={() => setAspect(item.ratio)}
+                  className={cn(
+                    "px-3 py-1 rounded-lg font-medium transition-all cursor-pointer",
+                    aspect === item.ratio
+                      ? "bg-primary text-primary-foreground font-semibold shadow-xs"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                  )}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Cropper Container */}
+          <div className="relative h-[320px] bg-zinc-950 rounded-xl overflow-hidden border border-border/60 shadow-inner">
             {imageSrc && (
               <Cropper
                 image={imageSrc}
                 crop={crop}
                 zoom={zoom}
-                aspect={16 / 9}
+                rotation={rotation}
+                aspect={aspect}
                 onCropChange={setCrop}
                 onZoomChange={setZoom}
+                onRotationChange={setRotation}
                 onCropComplete={onCropCompleteInternal}
-                style={{
-                  containerStyle: {
-                    background: "transparent",
-                  },
-                }}
               />
             )}
-            <div
-              className="absolute inset-0 pointer-events-none"
-              style={{
-                background: gradientFilters[selectedFilter - 1]?.gradient,
-                mixBlendMode: "overlay",
-                opacity: 0.3,
-              }}
-            />
           </div>
 
-          {/* Filter Selection */}
-          <div className="flex gap-2 mb-6 overflow-x-auto py-2 px-2">
-            {gradientFilters.map((filter) => (
-              <Button
-                key={filter.id}
-                onClick={() => setSelectedFilter(filter.id)}
-                className={`w-10 h-10 rounded-full flex-shrink-0 transition-all cursor-pointer ${
-                  selectedFilter === filter.id
-                    ? "ring-2 ring-primary ring-offset-2"
-                    : "hover:scale-110"
-                }`}
-                style={{ background: filter.gradient }}
+          {/* Controls: Zoom slider & Rotate button */}
+          <div className="flex items-center justify-between gap-4 pt-1 px-1 text-xs">
+            <div className="flex items-center gap-3 flex-1">
+              <ZoomIn className="w-4 h-4 text-muted-foreground shrink-0" />
+              <Slider
+                value={[zoom]}
+                min={1}
+                max={3}
+                step={0.1}
+                onValueChange={(v) => setZoom(v[0])}
+                className="flex-1 cursor-pointer"
               />
-            ))}
-           
+            </div>
+
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => setRotation((prev) => (prev + 90) % 360)}
+              className="h-8 px-2.5 text-xs font-medium cursor-pointer gap-1"
+            >
+              <RotateCw className="w-3.5 h-3.5" />
+              <span>Rotate</span>
+            </Button>
           </div>
 
-          {/* Footer */}
-          <div className="flex items-center justify-between pt-4 border-t">
-            <div className="flex items-center gap-2">
-              <Checkbox
-                id="dont-show"
-                checked={dontShowAgain}
-                onCheckedChange={(checked) =>
-                  setDontShowAgain(checked as boolean)
-                }
-              />
-              <label
-                htmlFor="dont-show"
-                className="text-sm text-foreground cursor-pointer select-none"
-              >
-                Don't show again
-              </label>
-            </div>
-            <div className="flex gap-2">
-              <Button
-                variant="outline"
-                className=" rounded-sm py-6 px-6 cursor-pointer font-medium"
-                onClick={() => onOpenChange(false)}
-              >
-                Cancel
-              </Button>
-              <Button
-                variant={"default"}
-                className="bg-primary hover:bg-primary/80 rounded-sm py-6 px-6 cursor-pointer font-semibold"
-                onClick={handleConfirm}
-              >
-                Confirm
-              </Button>
-            </div>
+          {/* Footer buttons */}
+          <div className="flex items-center justify-end gap-2 pt-3 border-t border-border/60">
+            <Button variant="outline" size="sm" onClick={() => onOpenChange(false)} className="px-4 h-9 cursor-pointer">
+              Cancel
+            </Button>
+            <Button size="sm" onClick={handleConfirm} className="px-5 h-9 font-bold cursor-pointer">
+              Apply Crop
+            </Button>
           </div>
         </div>
       </DialogContent>
