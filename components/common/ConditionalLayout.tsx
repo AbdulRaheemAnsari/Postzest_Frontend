@@ -11,28 +11,19 @@ export default function ConditionalLayout({
 }) {
   const pathname = usePathname();
 
-  // All dashboard routes
-  const isDashboard = ["/dashboard", "/settings", "/auth", "/onboarding"].some((route) =>
-    pathname.startsWith(route)
-  );
+  // Marketing pages where public Header and Footer should be rendered
+  const isMarketing =
+    pathname === "/" ||
+    ["/pricing", "/blog", "/privacy-policy", "/terms-of-services"].some(
+      (route) => pathname.startsWith(route)
+    );
 
   return (
     <>
-      {!isDashboard && (
-        <>
-          {/* Header only for non-dashboard pages */}
-          <Header />
-        </>
-      )}
-
+      {isMarketing && <Header />}
       {children}
-
-      {!isDashboard && (
-        <>
-          {/* Footer only for non-dashboard pages */}
-          <Footer />
-        </>
-      )}
+      {isMarketing && <Footer />}
     </>
   );
 }
+

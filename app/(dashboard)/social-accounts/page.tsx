@@ -42,11 +42,11 @@ function SocialAccountsContent() {
         onSuccess: () => {
           toast.success("LinkedIn account connected successfully!");
           queryClient.invalidateQueries({ queryKey: ["socialAccounts"] });
-          router.replace("/dashboard/social-accounts"); // Clean URL
+          router.replace("/social-accounts"); // Clean URL
         },
         onError: () => {
           toast.error("Failed to connect LinkedIn account");
-          router.replace("/dashboard/social-accounts"); // Clean URL even on error
+          router.replace("/social-accounts"); // Clean URL even on error
         },
       });
     }

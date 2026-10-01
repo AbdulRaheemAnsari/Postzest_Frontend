@@ -1,18 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { ChevronsUpDown, Plus } from "lucide-react";
 import postzestLogo from "@/assets/images/postzestlogo.png";
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import {
   SidebarMenu,
   SidebarMenuButton,
@@ -30,22 +20,23 @@ export function TeamSwitcher({
     plan: string;
   }[];
 }) {
-  const { isMobile } = useSidebar();
-  const [activeTeam, setActiveTeam] = React.useState(teams[0]);
-
-  if (!activeTeam) {
-    return null;
-  }
+  const { state } = useSidebar();
+  const isCollapsed = state === "collapsed";
 
   return (
     <SidebarMenu className="!px-0">
-      <SidebarMenuItem className="">
-        <DropdownMenu>
-          <SidebarMenuButton size="sm" className="cursor-pointer">
-            <Image src={postzestLogo} alt="" className="w-40 max-w-50 !px-0" />
-          </SidebarMenuButton>
-        </DropdownMenu>
+      <SidebarMenuItem>
+        <SidebarMenuButton size="sm" className="cursor-pointer hover:bg-transparent justify-start px-0">
+          {isCollapsed ? (
+            <div className="h-8 w-8 rounded-md bg-primary/10 flex items-center justify-center shrink-0 mx-auto overflow-hidden">
+              <Image src={postzestLogo} alt="PostZest" className="h-6 w-20 max-w-none object-cover object-left" />
+            </div>
+          ) : (
+            <Image src={postzestLogo} alt="PostZest" className="h-12 w-auto object-contain max-w-[170px]" />
+          )}
+        </SidebarMenuButton>
       </SidebarMenuItem>
     </SidebarMenu>
   );
 }
+

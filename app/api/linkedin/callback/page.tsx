@@ -12,10 +12,10 @@ function LinkedInCallbackContent() {
         const code = searchParams.get("code");
         if (code) {
             // Redirect back to the social accounts page with the code
-            router.replace(`/dashboard/social-accounts?code=${code}`);
+            router.replace(`/home/social-accounts?code=${code}`);
         } else {
             // If there's an error or no code, also go back
-            router.replace("/dashboard/social-accounts");
+            router.replace("/home/social-accounts");
         }
     }, [searchParams, router]);
 

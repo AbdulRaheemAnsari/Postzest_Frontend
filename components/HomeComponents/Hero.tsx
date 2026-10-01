@@ -63,8 +63,8 @@ const Hero = () => {
         </div> */}
 
         <div className="max-w-4xl mx-auto text-center space-y-6 mb-12">
-          <h1 className="text-5xl lg:text-6xl font-bold leading-tight text-foreground">
-            Track, Analyze, and Grow Your Social Media with Ease
+          <h1 className="text-5xl lg:text-6xl font-bold! leading-[1.3]! tracking-tighter text-foreground">
+            Social media using Automation & AI Agents.
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Get real-time insights on audience growth, follower trends, and

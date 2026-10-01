@@ -55,23 +55,23 @@ export function LoginForm({
     },
   });
 
- const { mutate: userLogin, isPending: userLoginIsPending } = useLoginMutation();
+  const { mutate: userLogin, isPending: userLoginIsPending } = useLoginMutation();
 
-const onSubmit = (payload: LoginRequest) => {
-  userLogin(payload, {
-    onSuccess: (res) => {
-      const token = res.data?.accessToken;
-      const user = res.data?.user;
-      localStorage.setItem("token", token);
-      dispatch(setAuthData({ token, user }));
-      toast.success(`${user.name} Successfully logged in`);
-      router.push("/dashboard/ai-studio");
-    },
-    onError: (err: any) => {
-      toast.error(err.response?.data?.message);
-    },
-  });
-};
+  const onSubmit = (payload: LoginRequest) => {
+    userLogin(payload, {
+      onSuccess: (res) => {
+        const token = res.data?.accessToken;
+        const user = res.data?.user;
+        localStorage.setItem("token", token);
+        dispatch(setAuthData({ token, user }));
+        toast.success(`${user.name} Successfully logged in`);
+        router.push("/home");
+      },
+      onError: (err: any) => {
+        toast.error(err.response?.data?.message);
+      },
+    });
+  };
 
   return (
     <Form {...form}>

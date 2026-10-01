@@ -16,13 +16,13 @@ export default function ProtectedRoute({
 
   console.log("token", token);
 
-  useEffect(() => {
-    if (!token) {
-      router.replace("/auth/login");
-    }
-  }, [token, router]);
+  // useEffect(() => {
+  //   if (!token) {
+  //     router.replace("/auth/login");
+  //   }
+  // }, [token, router]);
 
-  if (!token) return <GlobalRouteLoader children={children} />;
+  // if (!token) return <GlobalRouteLoader children={children} />;
 
   return <>{children}</>;
 }

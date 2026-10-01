@@ -8,14 +8,12 @@ import {
   FilePenLine,
   FilePlus,
   FileText,
-  Layers,
   LayoutDashboard,
   Lightbulb,
   Plus,
   Settings,
   Upload,
   Users,
-  WandSparkles,
 } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
@@ -26,13 +24,9 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
-  SidebarRail,
   useSidebar,
 } from "@/components/ui/sidebar";
 import { Button } from "./ui/button";
-import { Separator } from "./ui/separator";
-import { WorkspaceSwitcher } from "./common/WorkspaceSwitcher";
-import { CreateWorkspaceModal } from "./modals/CreateWorkspaceModal";
 import { useDispatch } from "react-redux";
 import { openCreatePostModal } from "@/store/slices/createPostModalSlice";
 
@@ -54,28 +48,18 @@ const data = {
       title: "Overview",
       items: [
         {
-          title: "New Post",
-          url: "/dashboard/new-post",
-          icon: FilePlus,
-        },
-        {
-          title: "AI Studio",
-          url: "/dashboard/ai-studio",
-          icon: WandSparkles,
-        },
-        {
-          title: "Bulk Tools",
-          url: "/dashboard/bulk-tools",
-          icon: Layers,
-        },
-        {
-          title: "Dashboard",
-          url: "/dashboard",
+          title: "Home",
+          url: "/home",
           icon: LayoutDashboard,
         },
         {
+          title: "New Post",
+          url: "/new-post",
+          icon: FilePlus,
+        },
+        {
           title: "Analytics",
-          url: "/dashboard/analytics",
+          url: "/analytics",
           icon: FileChartColumnIncreasing,
         },
       ],
@@ -85,35 +69,35 @@ const data = {
       items: [
         {
           title: "Ideas",
-          url: "/dashboard/ideas",
+          url: "/ideas",
           icon: Lightbulb,
         },
         {
           title: "Calendar",
-          url: "/dashboard/calendar",
+          url: "/calendar",
           icon: CalendarDays,
         },
         {
           title: "All Posts",
-          url: "/dashboard/posts",
+          url: "/posts",
           icon: FileText,
           badge: 21,
         },
         {
           title: "Scheduled Posts",
-          url: "/dashboard/scheduled-posts",
+          url: "/scheduled-posts",
           icon: CalendarCheck,
           badge: 11,
         },
         {
           title: "Uploaded Posts",
-          url: "/dashboard/uploaded-posts",
+          url: "/uploaded-posts",
           icon: Upload,
           badge: 261,
         },
         {
           title: "Draft",
-          url: "/dashboard/draft",
+          url: "/draft",
           icon: FilePenLine,
           badge: 6,
         },
@@ -124,7 +108,7 @@ const data = {
       items: [
         {
           title: "Social Accounts",
-          url: "/dashboard/social-accounts",
+          url: "/social-accounts",
           icon: Users,
         },
         {
@@ -147,50 +131,36 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     state === true || state === "collapsed" || state === "icon";
 
   return (
-    <Sidebar className="scroll-px-0.5 px-1" collapsible="icon" {...props}>
-      <SidebarHeader className="border-b border-muted-foreground/10 mb-4 px-0">
+    <Sidebar className="group-data-[collapsible=icon]:px-0 px-0!" collapsible="icon" {...props}>
+      <SidebarHeader className="py-3 group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:p-0 group-data-[collapsible=icon]:py-2 group-data-[collapsible=icon]:mb-0 flex items-center justify-center">
         <TeamSwitcher teams={data.teams} />
       </SidebarHeader>
 
-      <div className="px-2 ">
-        <WorkspaceSwitcher
-          // @ts-ignore
-          setIsOpen={setIsOpen}
-          isCollapsed={isCollapsed}
-          workspaces={[]}
-          currentWorkspaceId={""}
-          onSelectWorkspace={() => { }}
-          onEditWorkspace={() => { }}
-          onCreateWorkspace={() => { }}
-          onDeleteWorkspace={() => { }}
-        />
-        <Separator className="bg-muted-foreground/10 my-2" />
-
+      <div className="space-y-2.5 px-1 group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:space-y-1.5 group-data-[collapsible=icon]:mb-2 flex flex-col items-center w-full">
         <Button
           onClick={() => dispatch(openCreatePostModal())}
-          className="w-full font-semibold text-md p-3 py-6 rounded-md cursor-pointer flex items-center justify-center gap-0.5"
+          className={
+            isCollapsed
+              ? "h-8 w-8 p-0 mx-auto rounded-md flex items-center justify-center bg-primary hover:bg-primary/90 text-primary-foreground shadow-xs cursor-pointer shrink-0"
+              : "w-full font-semibold text-sm h-11 px-4 rounded-full cursor-pointer flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm"
+          }
+          title="Create Post"
         >
-          {/* <FilePlus className="h-5 w-5" /> */}
-          <Plus strokeWidth={3} className="h-5 w-5" />
-          {!isCollapsed && <span>Create Post</span>}
+          <Plus strokeWidth={2.5} className="h-4 w-4 shrink-0" />
+          {!isCollapsed && <span>Create New</span>}
         </Button>
       </div>
 
-      <Separator className="bg-muted-foreground/10 mt-4" />
 
       {/* Navigation */}
-      <SidebarContent>
+      <SidebarContent className="group-data-[collapsible=icon]:px-0">
         <NavMain items={data.navMain} />
       </SidebarContent>
 
-      {/* Footer */}
-      <SidebarFooter>
+      {/* Footer with profile + sidebar toggle icon */}
+      <SidebarFooter className="border-t border-muted-foreground/10 p-1 group-data-[collapsible=icon]:p-0 group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:py-2 mt-auto flex flex-col items-center justify-center">
         <NavUser user={data.user} />
       </SidebarFooter>
-
-      <SidebarRail />
-      {/* @ts-ignore */}
-      <CreateWorkspaceModal isOpen={isOpen} setIsOpen={setIsOpen} />
     </Sidebar>
   );
 }

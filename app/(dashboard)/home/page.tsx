@@ -141,15 +141,15 @@ const Dashboard = () => {
                           post.status === "published"
                             ? "default"
                             : post.status === "scheduled"
-                            ? "secondary"
-                            : "outline"
+                              ? "secondary"
+                              : "outline"
                         }
                         className={
                           post.status === "published"
                             ? "bg-success text-success-foreground"
                             : post.status === "scheduled"
-                            ? "bg-warning text-warning-foreground"
-                            : ""
+                              ? "bg-warning text-warning-foreground"
+                              : ""
                         }
                       >
                         {post.status}
